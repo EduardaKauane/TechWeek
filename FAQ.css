@@ -8,6 +8,12 @@
   --border: #e2e8f0;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 body {
   background: var(--bg);
   padding: 0;
@@ -17,8 +23,86 @@ body {
 
 .faq {
   max-width: 800px;
-  margin: 60px auto;
+  margin: 30px auto;
   padding: 20px;
+}
+
+.faq-header h1 {
+  margin: 0;
+  margin-bottom: 4px;
+  font-size: 28px;
+  color: #003d82;
+}
+
+.faq-header p {
+  margin: 0;
+  color: #0055b8;
+  font-size: 14px;
+}
+
+.faq-header {
+  background: #e7f2fd;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.faq-header-conteudo {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-top: 1rem;
+}
+
+.faq-icon {
+  background: #003d82;
+  padding: 12px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.faq-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+  fill: none;
+}
+
+.lista-secao {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 40px;
+}
+
+.lista-secao a {
+  text-decoration: none;
+  color: #003d82;
+  font-weight: 500;
+  position: relative;
+}
+
+.lista-secao a:hover {
+  color: #0055b8;
+}
+
+.lista-secao a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: #0055b8;
+  transition: width 0.3s ease;
+}
+
+.lista-secao a:hover::after {
+  width: 100%;
 }
 
 .faq-header h2 {
