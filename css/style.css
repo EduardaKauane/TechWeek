@@ -69,3 +69,7 @@ button:last-child {
     border: 2px solid #2563eb;
     color: #2563eb;
 }
+/* FAQ */
+.faq { max-width: 800px; margin: 60px auto; padding: 20px; }
+
+/* (restante do FAQ igual você já tem) */
