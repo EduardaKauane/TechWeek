@@ -19,4 +19,4 @@ document.querySelectorAll(".faq-perguntas").forEach((btn) => {
     btn.setAttribute("aria-expanded", !expanded);
     answer.hidden = expanded;
   });
-});
+}); 
