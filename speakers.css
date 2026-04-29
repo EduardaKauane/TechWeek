@@ -58,3 +58,26 @@ body {
     font-size: 0.9rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+.sobre-tema {
+    background: linear-gradient(135deg, #033c75 0%, #035cc2 100%);
+    color: white;
+    text-align: center;
+    padding: 40px 100px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#content-wrapper {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.tema-item {
+    background: rgba(255, 255, 255, 0.3); 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 10px 5px;
+    width: 50%;
+    align-items: center;
+}
