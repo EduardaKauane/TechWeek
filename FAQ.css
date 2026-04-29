@@ -28,7 +28,6 @@ body {
 }
 
 .faq-header h1 {
-  margin: 0;
   margin-bottom: 4px;
   font-size: 28px;
   color: #003d82;
@@ -42,14 +41,15 @@ body {
 
 .faq-header {
   background: #e7f2fd;
-  padding: 20px;
+  padding: 24px 20px;
   border-radius: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .faq-header-conteudo {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 15px;
   margin-top: 1rem;
 }
@@ -61,7 +61,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 4px;
+  margin-bottom: 1rem;
 }
 
 .faq-icon svg {
