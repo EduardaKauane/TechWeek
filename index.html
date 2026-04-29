@@ -7,10 +7,7 @@
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230066cc'/><text x='50' y='65' font-size='60' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial'>TW</text></svg>" type="image/svg+xml">
 
-    <!-- CSS (SEGUNDA-FEIRA) -->
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- JS (ALGUM DIA) -->
     <script src="js/script.js" defer></script>
 </head>
 
@@ -22,6 +19,7 @@
             <h1>Tech Week</h1>
 
             <ul>
+               
                 <li><a href="#programacao">Programação</a></li>
                 <li><a href="#palestrantes">Palestrantes</a></li>
                 <li><a href="#localizacao">Localização</a></li>
@@ -32,10 +30,11 @@
     </header>
 
     <!-- WESLEY - HERO -->
-    <section id="programacao">
-    <h2>Programação do Evento</h2>
-    <p>Em breve...</p>
-     </section>
+     <section id="programacao">
+        <h2>Programação do Evento</h2>
+        <p>Em breve na Unicesumar...</p>
+    </section>
+
     <main>
         <section id="hero">
             <p>📅 5 a 9 de Maio, 2026</p>
@@ -46,7 +45,7 @@
             <p>
                 Dados, Inovação e Transformação Digital
             </p>
-             <p>Evento gratuito e aberto ao público.</p> 
+            <p>Evento gratuito e aberto ao público.</p> 
             <div>
                 <button onclick="mostrarFormulario()">Quero Participar</button>
                 <button onclick="mostrarPalestrante()">Sou Palestrante</button>
@@ -54,6 +53,48 @@
 
         </section>
     </main>
+
+    <!-- FORMULÁRIO DE INSCRIÇÃO -->
+    <section id="inscricao" style="display: none;">
+    <h2>Inscrição de Participante (Aluno)</h2>
+    <p>Preencha os dados abaixo</p>
+
+    <input type="text" placeholder="Digite seu nome completo"><br><br>
+    <input type="text" placeholder="Digite seu RA"><br><br>
+    <input type="text" placeholder="Digite seu curso"><br><br>
+    <input type="text" placeholder="Digite o semestre (ex: 3º)"><br><br>
+
+    <p>Haverá coffee break durante o evento ☕</p>
+    <p>Quarta-feira será dedicada à apresentação de projetos</p>
+
+    <p><strong>Gostaria de participar?</strong></p>
+
+    <button>Sim</button>
+    <button>Não</button>
+    <br><br>
+
+    <button>Confirmar Inscrição</button>
+    </section>
+     
+    <!-- FORMULÁRIO PALESTRANTE -->
+    <section id="palestrante" style="display: none;">
+        <h2>Inscrição de Palestrante</h2>
+        <p>Envie sua proposta de palestra</p>
+
+        <input type="text" placeholder="Nome completo"><br><br>
+        <input type="text" placeholder="Telefone"><br><br>
+        <input type="email" placeholder="Email"><br><br>
+        <input type="text" placeholder="Tema da palestra"><br><br>
+        <input type="text" placeholder="Curso ou desenvolvimento pessoal"><br><br>
+
+        <textarea placeholder="Briefing (o que será apresentado)"></textarea><br><br>
+
+        <button>Enviar proposta</button>
+    </section>
+
+</body>
+</html>
+
 
   <!-- ===== OUTRAS SEÇÕES (EQUIPE) ===== -->
     <!-- Eduarda vai adicionar aqui -->
