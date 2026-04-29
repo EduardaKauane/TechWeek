@@ -19,7 +19,7 @@ document.querySelectorAll(".faq-perguntas").forEach((btn) => {
     btn.setAttribute("aria-expanded", !expanded);
     answer.hidden = expanded;
   });
-}); 
+});
 function mostrarFormulario() {
     const form = document.getElementById("inscricao");
 
@@ -29,7 +29,6 @@ function mostrarFormulario() {
         form.style.display = "none";
     }
 }
-
 function mostrarPalestrante() {
     const palestrante = document.getElementById("palestrante");
     const inscricao = document.getElementById("inscricao");
