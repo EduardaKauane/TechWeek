@@ -12,17 +12,11 @@ body {
     color: #333;
 }
 
-/* PALETA */
-:root {
-  --primary: #003d82;
-  --primary-light: #0055b8;
-  --bg: #f8fafc;
-  --white: #ffffff;
-  --text: #0f172a;
-  --border: #e2e8f0;
+/* NAVBAR */
+header {
+    background: #1e3a8a;
+    padding: 15px 40px;
 }
-/* NAVBAR + HERO + BOTÕES */
-header { background: #1e3a8a; padding: 15px 40px; }
 
 nav {
     display: flex;
@@ -30,7 +24,9 @@ nav {
     align-items: center;
 }
 
-nav h1 { color: white; }
+nav h1 {
+    color: white;
+}
 
 nav ul {
     list-style: none;
@@ -44,18 +40,31 @@ nav a {
     font-weight: bold;
 }
 
+/* HERO */
 #hero {
     text-align: center;
     padding: 80px 20px;
 }
 
-#hero h1 { font-size: 40px; color: #1e3a8a; }
-#hero h2 { margin: 10px 0; color: #2563eb; }
-#hero p { margin: 10px 0; }
+#hero h1 {
+    font-size: 40px;
+    color: #1e3a8a;
+}
 
+#hero h2 {
+    margin: 10px 0;
+    color: #2563eb;
+}
+
+#hero p {
+    margin: 10px 0;
+}
+
+/* BOTÕES */
 button {
     padding: 12px 20px;
     margin: 10px;
+    border: none;
     border-radius: 8px;
     cursor: pointer;
 }
@@ -66,14 +75,129 @@ button:first-child {
 }
 
 button:last-child {
+    background: transparent;
     border: 2px solid #2563eb;
     color: #2563eb;
 }
-/* FAQ */
-.faq { max-width: 800px; margin: 60px auto; padding: 20px; }
+/* Paleta de Cores */
+:root {
+  --primary: #003d82;
+  --primary-light: #0055b8;
+  --bg: #f8fafc;
+  --white: #ffffff;
+  --text: #0f172a;
+  --border: #e2e8f0;
+}
 
-/* (restante do FAQ igual você já tem) */
-/* FORMULÁRIOS */
+body {
+  background: var(--bg);
+  padding: 0;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.faq {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.faq-header h2 {
+  font-size: 32px;
+  color: var(--primary);
+  margin-bottom: 5px;
+}
+
+.faq-header p {
+  color: var(--primary-light);
+  margin-bottom: 30px;
+}
+
+.faq-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.faq-perguntas {
+  width: 100%;
+  padding: 18px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-perguntas[aria-expanded="true"] {
+  background: #eef4ff;
+}
+
+.faq-perguntas[aria-expanded="true"] + .faq-respostas {
+  border-top: 1px solid var(--border);
+}
+
+.faq-perguntas::after {
+  content: "▾";
+  font-size: 18px;
+  color: var(--primary-light);
+  transition: transform 0.2s ease;
+}
+
+.faq-perguntas[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+.faq-respostas {
+  padding: 12px 18px 14px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.faq-respostas[hidden] {
+  display: none;
+}
+
+.faq-perguntas:hover {
+  background: #f1f5f9;
+}
+
+.faq-contato {
+  margin-top: 30px;
+  text-align: center;
+  padding: 20px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.faq-contato a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.faq-contato a:hover {
+  text-decoration: underline;
+}
+
+#inscricao {
+    text-align: center;
+    padding: 40px;
+    background: #ffffff;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+/* FORMULÁRIOS (inscrição e palestrante) */
 #inscricao,
 #palestrante {
     background: white;
@@ -83,14 +207,62 @@ button:last-child {
     max-width: 500px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* DARK MODE */
+/* INPUTS */
+#inscricao input,
+#palestrante input,
+#palestrante textarea {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* TEXTAREA */
+#palestrante textarea {
+    height: 100px;
+    resize: none;
+}
+
+/* BOTÃO */
+#inscricao button,
+#palestrante button {
+    background: #2563eb;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* HOVER */
+#inscricao button:hover,
+#palestrante button:hover {
+    background: #1e40af;
+}
+/* TEMA CLARO (padrão) */
+body {
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* TEMA ESCURO */
 body.dark {
     background-color: #121212;
     color: #ffffff;
 }
 
+/* NAVBAR DARK */
 body.dark header {
     background: #0f172a;
+}
+
+/* FORMULÁRIOS DARK */
+body.dark #inscricao,
+body.dark #palestrante {
+    background: #1e293b;
+    color: white;
 }
