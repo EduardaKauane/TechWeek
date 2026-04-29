@@ -1,0 +1,35 @@
+body {
+    background-color: #f8faff;
+}
+
+.palestrantes {
+    text-align: center;
+    background-color: rgb(226, 238, 248);
+    padding: 5px 10px;
+}
+
+#palestrantes-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.card-palestrante {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    width: 250px;
+    transition: transform 0.3s ease;
+}
+
+.card-palestrante:hover {
+    transform: translateY(-5px);
+}
+
+.card-palestrante img {
+    width: 100px;
+    border-radius: 100%;
+}
