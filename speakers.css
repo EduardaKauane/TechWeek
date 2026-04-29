@@ -5,7 +5,13 @@ body {
 .palestrantes {
     text-align: center;
     background-color: rgb(226, 238, 248);
-    padding: 5px 10px;
+    padding: 5px 10px 20px 10px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #003366;
+}
+
+.palestrantes p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #palestrantes-container {
@@ -31,5 +37,24 @@ body {
 
 .card-palestrante img {
     width: 100px;
+    height: 100px;
     border-radius: 100%;
+    background-color: rgb(65, 65, 160);
+    object-fit: cover;
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.card-palestrante h2 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #003366;
+}
+
+.card-palestrante p {
+    color: #557;
+    font-size: 0.9rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
