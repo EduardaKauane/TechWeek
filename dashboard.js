@@ -219,54 +219,125 @@ function renderCard(item, section) {
     </div>`;
 }
 
-// ── Relatórios card ────────────────────────────────────────────────────────────
-function renderRelatorioCard(item, section) {
-  return `
-    <div class="inscricao-card ${item.status}" data-id="${item.id}">
-      <div class="card-top-row">
-        <span class="category-tag">${section.label}</span>
-        ${getStatusBadge(item.status)}
-      </div>
+// ── Relatórios State ───────────────────────────────────────────────────────────
+const relState = {
+  expandedSections: new Set(),
+  expandedCards:    new Set(),
+  search:           ''
+};
+
+const sectionTitles = {
+  participantes: 'Participantes',
+  palestrantes:  'Palestrantes',
+  coffeeBreak:   'Coffee Break',
+  projetos:      'Projetos'
+};
+
+const chevronSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
+
+function toggleRelSection(key) {
+  relState.expandedSections.has(key)
+    ? relState.expandedSections.delete(key)
+    : relState.expandedSections.add(key);
+  renderRelatorios();
+}
+
+function toggleRelCard(sectionKey, id) {
+  const k = `${sectionKey}-${id}`;
+  relState.expandedCards.has(k)
+    ? relState.expandedCards.delete(k)
+    : relState.expandedCards.add(k);
+  renderRelatorios();
+}
+
+function filterRel(items) {
+  const term = relState.search.toLowerCase();
+  if (!term) return items;
+  return items.filter(i =>
+    (i.nome  && i.nome.toLowerCase().includes(term)) ||
+    (i.email && i.email.toLowerCase().includes(term))
+  );
+}
+
+function renderMiniCard(item, section) {
+  const k      = `${section.key}-${item.id}`;
+  const isOpen = relState.expandedCards.has(k);
+
+  const details = isOpen ? `
+    <div class="rel-details">
       <div class="card-fields">${buildFields(item, section)}</div>
       <div class="card-actions">
-        <button class="btn btn-change" onclick="openChangeStatus('${section.key}', ${item.id})">
+        <button class="btn btn-change" onclick="event.stopPropagation(); openChangeStatus('${section.key}', ${item.id})">
           ${icons.refresh} Alterar status
         </button>
       </div>
+    </div>` : '';
+
+  return `
+    <div class="rel-mini-card ${item.status}" onclick="toggleRelCard('${section.key}', ${item.id})">
+      <div class="rel-mini-top">
+        <div class="rel-mini-info">
+          <span class="rel-mini-name">${item.nome}</span>
+          <span class="rel-mini-email">${item.email || ''}</span>
+        </div>
+        <div class="mini-chevron ${isOpen ? 'open' : ''}">${chevronSVG}</div>
+      </div>
+      ${details}
+    </div>`;
+}
+
+function renderSubgroup(items, section, statusVal, label) {
+  const filtered = filterRel(items.filter(i => i.status === statusVal));
+  const body = filtered.length === 0
+    ? `<p class="rel-empty">Nenhum registro ${statusVal === 'aceito' ? 'aceito' : 'negado'} nesta categoria</p>`
+    : filtered.map(item => renderMiniCard(item, section)).join('');
+
+  return `
+    <div class="rel-subgroup">
+      <div class="rel-subgroup-header ${statusVal}">
+        <span class="rel-sub-label">● ${label} (${filtered.length})</span>
+      </div>
+      ${body}
     </div>`;
 }
 
 // ── Render Relatórios ──────────────────────────────────────────────────────────
 function renderRelatorios() {
-  const container = document.getElementById('tab-relatorios');
-  const aceitos = [], negados = [];
+  const content = document.getElementById('relatorios-content');
+  if (!content) return;
 
-  sections.forEach(section => {
-    db[section.key].forEach(item => {
-      if (item.status === 'aceito') aceitos.push({ item, section });
-      if (item.status === 'negado') negados.push({ item, section });
-    });
-  });
+  content.innerHTML = sections.map(section => {
+    const items        = db[section.key];
+    const totalAceitos = items.filter(i => i.status === 'aceito').length;
+    const totalNegados = items.filter(i => i.status === 'negado').length;
 
-  const buildGroup = (entries, iconHtml, iconClass, title, emptyMsg) => `
-    <div class="card section">
-      <div class="section-header">
-        <div class="section-title">
-          <div class="section-icon ${iconClass}">${iconHtml}</div>
-          <h2>${title} (${entries.length})</h2>
+    // Hide section when searching and no matches
+    const hasMatch = filterRel(items.filter(i => i.status === 'aceito' || i.status === 'negado')).length > 0;
+    if (relState.search && !hasMatch) return '';
+
+    const isOpen = relState.expandedSections.has(section.key);
+    const title  = sectionTitles[section.key];
+
+    return `
+      <div class="card section">
+        <div class="rel-section-header" onclick="toggleRelSection('${section.key}')">
+          <div class="section-title">
+            <div class="section-icon">${section.emptyIcon}</div>
+            <h2>${title}</h2>
+            <div class="rel-count-badges">
+              <span class="rel-count-badge aceito-count">${totalAceitos} aceito${totalAceitos !== 1 ? 's' : ''}</span>
+              <span class="rel-count-badge negado-count">${totalNegados} negado${totalNegados !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+          <div class="expand-chevron ${isOpen ? 'open' : ''}">${chevronSVG}</div>
         </div>
-      </div>
-      <div class="inscricoes-list">
-        ${entries.length === 0
-          ? `<div class="empty-state"><div class="empty-icon">${iconHtml}</div><p>${emptyMsg}</p></div>`
-          : entries.map(({ item, section }) => renderRelatorioCard(item, section)).join('')
-        }
-      </div>
-    </div>`;
-
-  container.innerHTML =
-    buildGroup(aceitos, icons.checkCircle, 'icon-green', 'Aceitos', 'Nenhuma inscrição aceita ainda') +
-    buildGroup(negados, icons.xCircle,     'icon-red',   'Negados', 'Nenhuma inscrição negada ainda');
+        ${isOpen ? `
+          <div class="rel-body">
+            ${renderSubgroup(items, section, 'aceito', 'Aceitos')}
+            ${renderSubgroup(items, section, 'negado', 'Negados')}
+          </div>` : ''}
+      </div>`;
+  }).join('');
 }
 
 // ── Render Dashboard ───────────────────────────────────────────────────────────
@@ -382,6 +453,11 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 document.getElementById('search-input').addEventListener('input', e => {
   searchTerm = e.target.value;
   render();
+});
+
+document.getElementById('search-relatorios').addEventListener('input', e => {
+  relState.search = e.target.value;
+  renderRelatorios();
 });
 
 render();
