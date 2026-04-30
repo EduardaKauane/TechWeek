@@ -10,7 +10,7 @@
   /* fundos */
   --bg: #e9edf2;
   --bg-card: #ffffff;
-  --bg-header: #e7f2fd;
+  --bg-header: #ffffff;
   --bg-soft: #eef4ff;
   --bg-hover: #f1f5f9;
 
@@ -68,7 +68,7 @@ header {
 /* HEADER FAQ */
 .faq-header {
   background: var(--bg-header);
-  padding: 24px 20px;
+  padding: 28px 20px;
   border-radius: 12px;
   margin-bottom: 1rem;
   box-shadow: 0 4px 10px var(--shadow);
@@ -81,7 +81,7 @@ header {
 }
 
 .faq-header h1 {
-  margin-bottom: 4px;
+  margin: 0;
   font-size: 28px;
   color: var(--primary);
 }
