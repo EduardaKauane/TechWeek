@@ -1,4 +1,4 @@
-// Mock data
+// ── Mock data ──────────────────────────────────────────────────────────────────
 const db = {
   participantes: [
     { id: 1, nome: 'Ana Clara Silva', email: 'ana.silva@email.com', telefone: '67999111111', status: 'pendente' },
@@ -33,7 +33,7 @@ const db = {
   ]
 };
 
-// Section configuration
+// ── Section config ─────────────────────────────────────────────────────────────
 const sections = [
   {
     key: 'participantes',
@@ -42,6 +42,7 @@ const sections = [
     countId: 'count-participantes',
     statId: 'stat-participantes',
     emptyMsg: 'Nenhum participante inscrito ainda',
+    emptyIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>`,
     fields: [
       { key: 'nome', label: 'Nome', fullWidth: false },
       { key: 'email', label: 'Email', fullWidth: false },
@@ -55,6 +56,7 @@ const sections = [
     countId: 'count-palestrantes',
     statId: 'stat-palestrantes',
     emptyMsg: 'Nenhum palestrante cadastrado',
+    emptyIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>`,
     fields: [
       { key: 'nome', label: 'Nome', fullWidth: false },
       { key: 'tema', label: 'Tema', fullWidth: false },
@@ -71,6 +73,7 @@ const sections = [
     countId: 'count-coffee',
     statId: 'stat-coffee',
     emptyMsg: 'Nenhum participante confirmado para o coffee break',
+    emptyIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/></svg>`,
     fields: [
       { key: 'nome', label: 'Nome', fullWidth: false },
       { key: 'email', label: 'Email', fullWidth: false },
@@ -85,6 +88,7 @@ const sections = [
     countId: 'count-projetos',
     statId: 'stat-projetos',
     emptyMsg: 'Nenhum projeto cadastrado ainda',
+    emptyIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="12" x2="12" y1="17" y2="21"/></svg>`,
     fields: [
       { key: 'nome', label: 'Nome do Projeto', fullWidth: false },
       { key: 'equipe', label: 'Equipe', fullWidth: false },
@@ -98,31 +102,85 @@ const sections = [
 const statusLabels = { pendente: 'Pendente', aceito: 'Aceito', negado: 'Negado' };
 
 const icons = {
-  check: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
-  x: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
-  refresh: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>`,
-  checkCircle: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
-  xCircle: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`
+  check:       `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  x:           `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
+  refresh:     `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>`,
+  checkCircle: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  xCircle:     `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`
 };
 
-// State
-let searchTerm = '';
-let currentTab = 'dashboard';
+// ── State ──────────────────────────────────────────────────────────────────────
+let searchTerm  = '';
+let currentTab  = 'dashboard';
 let pendingAction = null;
 
-// ── Tab switching ──────────────────────────────────────────────────────────────
+// ── Theme ──────────────────────────────────────────────────────────────────────
+(function applyTheme() {
+  const saved = localStorage.getItem('theme') || '';
+  document.documentElement.setAttribute('data-theme', saved);
+})();
 
-function switchTab(tab) {
-  currentTab = tab;
-  document.getElementById('tab-dashboard').classList.toggle('hidden', tab !== 'dashboard');
-  document.getElementById('tab-relatorios').classList.toggle('hidden', tab !== 'relatorios');
-  document.getElementById('tab-btn-dashboard').classList.toggle('active', tab === 'dashboard');
-  document.getElementById('tab-btn-relatorios').classList.toggle('active', tab === 'relatorios');
-  if (tab === 'relatorios') renderRelatorios();
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+}
+
+// ── Animated counter ───────────────────────────────────────────────────────────
+function animateCounter(el, target) {
+  const start = parseInt(el.textContent) || 0;
+  if (start === target) return;
+  const duration = 550;
+  const t0 = performance.now();
+  const tick = (now) => {
+    const p = Math.min((now - t0) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(start + (target - start) * ease);
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────────
+const toastSVGs = {
+  success: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  error:   `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
+  info:    `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`
+};
+
+function showToast(type, message) {
+  const id = `toast-${Date.now()}`;
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.id = id;
+  el.innerHTML = `
+    <div class="toast-icon">${toastSVGs[type]}</div>
+    <span class="toast-message">${message}</span>
+    <button class="toast-close" onclick="dismissToast('${id}')">×</button>
+  `;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => dismissToast(id), 3600);
+}
+
+function dismissToast(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('toast-leaving');
+  setTimeout(() => el?.remove(), 280);
+}
+
+// ── Card exit animation ────────────────────────────────────────────────────────
+function animateCardOut(sectionKey, id, callback) {
+  const section = sections.find(s => s.key === sectionKey);
+  const listEl  = section ? document.getElementById(section.listId) : null;
+  const card    = listEl?.querySelector(`[data-id="${id}"]`);
+  if (!card) { callback(); return; }
+  card.classList.add('card-leaving');
+  setTimeout(callback, 340);
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
-
 function getStatusBadge(status) {
   return `<span class="status-badge ${status}">● ${statusLabels[status]}</span>`;
 }
@@ -139,40 +197,32 @@ function buildFields(item, section) {
 }
 
 // ── Dashboard card ─────────────────────────────────────────────────────────────
-
 function renderCard(item, section) {
-  const actionsHTML = item.status === 'pendente'
+  const actions = item.status === 'pendente'
     ? `
       <button class="btn btn-accept" onclick="confirmAction('${section.key}', ${item.id}, 'aceito')">
         ${icons.check} Aceitar
       </button>
       <button class="btn btn-reject" onclick="confirmAction('${section.key}', ${item.id}, 'negado')">
         ${icons.x} Negar
-      </button>
-    `
+      </button>`
     : `
       <button class="btn btn-change" onclick="openChangeStatus('${section.key}', ${item.id})">
         ${icons.refresh} Alterar status
-      </button>
-    `;
+      </button>`;
 
   return `
-    <div class="inscricao-card ${item.status}">
-      <div class="card-top-row">
-        <span></span>
-        ${getStatusBadge(item.status)}
-      </div>
+    <div class="inscricao-card ${item.status}" data-id="${item.id}">
+      <div class="card-top-row"><span></span>${getStatusBadge(item.status)}</div>
       <div class="card-fields">${buildFields(item, section)}</div>
-      <div class="card-actions">${actionsHTML}</div>
-    </div>
-  `;
+      <div class="card-actions">${actions}</div>
+    </div>`;
 }
 
 // ── Relatórios card ────────────────────────────────────────────────────────────
-
 function renderRelatorioCard(item, section) {
   return `
-    <div class="inscricao-card ${item.status}">
+    <div class="inscricao-card ${item.status}" data-id="${item.id}">
       <div class="card-top-row">
         <span class="category-tag">${section.label}</span>
         ${getStatusBadge(item.status)}
@@ -183,15 +233,13 @@ function renderRelatorioCard(item, section) {
           ${icons.refresh} Alterar status
         </button>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
+// ── Render Relatórios ──────────────────────────────────────────────────────────
 function renderRelatorios() {
   const container = document.getElementById('tab-relatorios');
-
-  const aceitos = [];
-  const negados = [];
+  const aceitos = [], negados = [];
 
   sections.forEach(section => {
     db[section.key].forEach(item => {
@@ -200,36 +248,34 @@ function renderRelatorios() {
     });
   });
 
-  const buildGroup = (entries, status, iconHtml, iconClass, emptyMsg, sectionTitle) => `
+  const buildGroup = (entries, iconHtml, iconClass, title, emptyMsg) => `
     <div class="card section">
       <div class="section-header">
         <div class="section-title">
           <div class="section-icon ${iconClass}">${iconHtml}</div>
-          <h2>${sectionTitle} (${entries.length})</h2>
+          <h2>${title} (${entries.length})</h2>
         </div>
       </div>
       <div class="inscricoes-list">
         ${entries.length === 0
-          ? `<p class="empty-state">${emptyMsg}</p>`
+          ? `<div class="empty-state"><div class="empty-icon">${iconHtml}</div><p>${emptyMsg}</p></div>`
           : entries.map(({ item, section }) => renderRelatorioCard(item, section)).join('')
         }
       </div>
-    </div>
-  `;
+    </div>`;
 
   container.innerHTML =
-    buildGroup(aceitos, 'aceito', icons.checkCircle, 'icon-green', 'Nenhuma inscrição aceita ainda', 'Aceitos') +
-    buildGroup(negados, 'negado', icons.xCircle, 'icon-red', 'Nenhuma inscrição negada ainda', 'Negados');
+    buildGroup(aceitos, icons.checkCircle, 'icon-green', 'Aceitos', 'Nenhuma inscrição aceita ainda') +
+    buildGroup(negados, icons.xCircle,     'icon-red',   'Negados', 'Nenhuma inscrição negada ainda');
 }
 
-// ── Dashboard render ───────────────────────────────────────────────────────────
-
+// ── Render Dashboard ───────────────────────────────────────────────────────────
 function filterItems(items) {
   return items.filter(item => {
     if (item.status !== 'pendente') return false;
     const term = searchTerm.toLowerCase();
     return !term ||
-      (item.nome && item.nome.toLowerCase().includes(term)) ||
+      (item.nome  && item.nome.toLowerCase().includes(term)) ||
       (item.email && item.email.toLowerCase().includes(term));
   });
 }
@@ -237,22 +283,35 @@ function filterItems(items) {
 function render() {
   sections.forEach(section => {
     const filtered = filterItems(db[section.key]);
-    const total = db[section.key].length;
+    const total    = db[section.key].length;
+    const pending  = db[section.key].filter(i => i.status === 'pendente').length;
 
-    document.getElementById(section.statId).textContent = total;
+    animateCounter(document.getElementById(section.statId), total);
     document.getElementById(section.countId).textContent = filtered.length;
+
+    const sub = document.getElementById(`stat-pending-${section.key}`);
+    if (sub) sub.textContent = `${pending} pendente${pending !== 1 ? 's' : ''}`;
 
     const listEl = document.getElementById(section.listId);
     listEl.innerHTML = filtered.length === 0
-      ? `<p class="empty-state">${section.emptyMsg}</p>`
+      ? `<div class="empty-state"><div class="empty-icon">${section.emptyIcon}</div><p>${section.emptyMsg}</p></div>`
       : filtered.map(item => renderCard(item, section)).join('');
   });
 
   if (currentTab === 'relatorios') renderRelatorios();
 }
 
-// ── Modal ──────────────────────────────────────────────────────────────────────
+// ── Tab switching ──────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-dashboard').classList.toggle('hidden', tab !== 'dashboard');
+  document.getElementById('tab-relatorios').classList.toggle('hidden', tab !== 'relatorios');
+  document.getElementById('tab-btn-dashboard').classList.toggle('active', tab === 'dashboard');
+  document.getElementById('tab-btn-relatorios').classList.toggle('active', tab === 'relatorios');
+  if (tab === 'relatorios') renderRelatorios();
+}
 
+// ── Modal ──────────────────────────────────────────────────────────────────────
 function showModal(title, message, showSelect, onConfirm) {
   document.getElementById('modal-title').textContent = title;
   document.getElementById('modal-message').textContent = message;
@@ -271,13 +330,23 @@ function findItem(sectionKey, id) {
 }
 
 function confirmAction(sectionKey, id, newStatus) {
-  const item = findItem(sectionKey, id);
-  const label = newStatus === 'aceito' ? 'aceitar' : 'negar';
+  const item  = findItem(sectionKey, id);
+  const verb  = newStatus === 'aceito' ? 'aceitar' : 'negar';
   showModal(
     'Confirmar ação',
-    `Tem certeza que deseja ${label} a inscrição de ${item.nome}?`,
+    `Tem certeza que deseja ${verb} a inscrição de ${item.nome}?`,
     false,
-    () => { item.status = newStatus; hideModal(); render(); }
+    () => {
+      item.status = newStatus;
+      hideModal();
+      const msg = newStatus === 'aceito'
+        ? `${item.nome} foi aceito(a) com sucesso!`
+        : `Inscrição de ${item.nome} foi negada.`;
+      animateCardOut(sectionKey, id, () => {
+        render();
+        showToast(newStatus === 'aceito' ? 'success' : 'error', msg);
+      });
+    }
   );
 }
 
@@ -288,12 +357,18 @@ function openChangeStatus(sectionKey, id) {
     'Alterar status',
     `Selecione o novo status para ${item.nome}:`,
     true,
-    () => { item.status = document.getElementById('modal-select').value; hideModal(); render(); }
+    () => {
+      const prev = item.status;
+      item.status = document.getElementById('modal-select').value;
+      hideModal();
+      render();
+      if (item.status !== prev)
+        showToast('info', `Status de ${item.nome} alterado para ${statusLabels[item.status]}.`);
+    }
   );
 }
 
 // ── Event listeners ────────────────────────────────────────────────────────────
-
 document.getElementById('btn-modal-confirm').addEventListener('click', () => {
   if (pendingAction) pendingAction();
 });
