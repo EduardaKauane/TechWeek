@@ -107,7 +107,6 @@ const icons = {
 
 // State
 let searchTerm = '';
-let filterStatus = '';
 let currentTab = 'dashboard';
 let pendingAction = null;
 
@@ -227,12 +226,11 @@ function renderRelatorios() {
 
 function filterItems(items) {
   return items.filter(item => {
+    if (item.status !== 'pendente') return false;
     const term = searchTerm.toLowerCase();
-    const matchSearch = !term ||
+    return !term ||
       (item.nome && item.nome.toLowerCase().includes(term)) ||
       (item.email && item.email.toLowerCase().includes(term));
-    const matchFilter = !filterStatus || item.status === filterStatus;
-    return matchSearch && matchFilter;
   });
 }
 
@@ -308,11 +306,6 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 
 document.getElementById('search-input').addEventListener('input', e => {
   searchTerm = e.target.value;
-  render();
-});
-
-document.getElementById('filter-status').addEventListener('change', e => {
-  filterStatus = e.target.value;
   render();
 });
 
