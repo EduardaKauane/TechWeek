@@ -219,6 +219,48 @@ function renderCard(item, section) {
     </div>`;
 }
 
+// ── Email sending ──────────────────────────────────────────────────────────────
+const emailSentItems = new Set(); // 'sectionKey-id' → já enviados
+const emailSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`;
+const spinSVG  = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
+
+async function sendEmail(sectionKey, id, btnEl) {
+  const item    = findItem(sectionKey, id);
+  const section = sections.find(s => s.key === sectionKey);
+
+  btnEl.disabled = true;
+  btnEl.innerHTML = `${spinSVG} Enviando...`;
+
+  try {
+    const res = await fetch('http://localhost:3000/send-email', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome:   item.nome,
+        email:  item.email,
+        status: 'aprovado',
+        tipo:   section.label.toLowerCase()
+      })
+    });
+
+    const json = await res.json();
+
+    if (json.success) {
+      emailSentItems.add(`${sectionKey}-${id}`);
+      showToast('success', `Email enviado para ${item.nome}!`);
+      btnEl.innerHTML = `${icons.check} Enviado`;
+      btnEl.classList.add('btn-email-sent');
+    } else {
+      throw new Error(json.error || 'Erro desconhecido');
+    }
+  } catch (err) {
+    console.error('sendEmail error:', err);
+    showToast('error', `Erro ao enviar email: ${err.message}`);
+    btnEl.disabled = false;
+    btnEl.innerHTML = `${emailSVG} Enviar email`;
+  }
+}
+
 // ── Relatórios State ───────────────────────────────────────────────────────────
 const relState = {
   expandedSections: new Set(),
@@ -260,8 +302,19 @@ function filterRel(items) {
 }
 
 function renderMiniCard(item, section) {
-  const k      = `${section.key}-${item.id}`;
-  const isOpen = relState.expandedCards.has(k);
+  const k        = `${section.key}-${item.id}`;
+  const isOpen   = relState.expandedCards.has(k);
+  const wasSent  = emailSentItems.has(k);
+
+  const emailBtn = item.status === 'aceito' ? `
+    <button
+      class="btn btn-email-mini ${wasSent ? 'btn-email-sent' : ''}"
+      onclick="event.stopPropagation(); ${wasSent ? '' : `sendEmail('${section.key}', ${item.id}, this)`}"
+      ${wasSent ? 'disabled' : ''}
+      title="${wasSent ? 'Email já enviado' : 'Enviar email de aprovação'}"
+    >
+      ${wasSent ? `${icons.check} Enviado` : `${emailSVG} Enviar email`}
+    </button>` : '';
 
   const details = isOpen ? `
     <div class="rel-details">
@@ -280,6 +333,7 @@ function renderMiniCard(item, section) {
           <span class="rel-mini-name">${item.nome}</span>
           <span class="rel-mini-email">${item.email || ''}</span>
         </div>
+        ${emailBtn}
         <div class="mini-chevron ${isOpen ? 'open' : ''}">${chevronSVG}</div>
       </div>
       ${details}
