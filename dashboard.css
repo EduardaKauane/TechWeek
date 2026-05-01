@@ -85,7 +85,7 @@
    ============================================================ */
 body, .card, .inscricao-card, .stat-card, .tab-nav, .tab-btn,
 .theme-toggle, .section-header, .modal-box, .search-input-wrap input,
-.btn-change, .btn-secondary, .empty-icon, .category-tag,
+.btn-change, .btn-secondary, .btn-delete-mini, .empty-icon, .category-tag,
 .status-badge, .field-value, .page-title, .section-title h2 {
   transition: background-color 0.28s ease, border-color 0.28s ease,
               color 0.22s ease, box-shadow 0.22s ease;
@@ -1097,6 +1097,31 @@ body {
   cursor: default;
   opacity: 0.75;
 }
+
+/* Delete button (mini card) */
+.btn-delete-mini {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.btn-delete-mini:hover {
+  background: rgba(220,38,38,0.1);
+  color: #dc2626;
+  border-color: rgba(220,38,38,0.2);
+  transform: translateY(-1px);
+}
+.btn-delete-mini:active { transform: scale(0.95); }
 
 /* Spinner icon animation */
 .spin {
