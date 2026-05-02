@@ -1,3 +1,4 @@
+
 /* RESET */
 * {
     margin: 0;
@@ -8,8 +9,9 @@
 /* BODY */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f7fa;
+    background-color: #ffffff;
     color: #333;
+    overflow-x: hidden;
 }
 
 /* NAVBAR */
@@ -31,6 +33,7 @@ nav h1 {
 nav ul {
     list-style: none;
     display: flex;
+    align-items: center;
     gap: 20px;
 }
 
@@ -79,348 +82,542 @@ button:last-child {
     border: 2px solid #2563eb;
     color: #2563eb;
 }
-/* Paleta de Cores */
-:root {
-  --primary: #003d82;
-  --primary-light: #0055b8;
-  --bg: #f8fafc;
-  --white: #ffffff;
-  --text: #0f172a;
-  --border: #e2e8f0;
-}
 
-body {
-  background: var(--bg);
-  padding: 0;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-.faq {
-  max-width: 800px;
-  margin: 60px auto;
-  padding: 20px;
-}
-
-.faq-header h2 {
-  font-size: 32px;
-  color: var(--primary);
-  margin-bottom: 5px;
-}
-
-.faq-header p {
-  color: var(--primary-light);
-  margin-bottom: 30px;
-}
-
-.faq-item {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-
-.faq-perguntas {
-  width: 100%;
-  padding: 18px;
-  border: none;
-  background: none;
-  text-align: left;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--primary);
-  cursor: pointer;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.faq-perguntas[aria-expanded="true"] {
-  background: #eef4ff;
-}
-
-.faq-perguntas[aria-expanded="true"] + .faq-respostas {
-  border-top: 1px solid var(--border);
-}
-
-.faq-perguntas::after {
-  content: "▾";
-  font-size: 18px;
-  color: var(--primary-light);
-  transition: transform 0.2s ease;
-}
-
-.faq-perguntas[aria-expanded="true"]::after {
-  transform: rotate(180deg);
-}
-
-.faq-respostas {
-  padding: 12px 18px 14px;
-  color: var(--text);
-  line-height: 1.5;
-}
-
-.faq-respostas[hidden] {
-  display: none;
-}
-
-.faq-perguntas:hover {
-  background: #f1f5f9;
-}
-
-.faq-contato {
-  margin-top: 30px;
-  text-align: center;
-  padding: 20px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-
-.faq-contato a {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.faq-contato a:hover {
-  text-decoration: underline;
-}
-
-#inscricao {
-    text-align: center;
-    padding: 40px;
-    background: #ffffff;
-    margin: 20px;
-    border-radius: 10px;
-}
-
-/* FORMULÁRIOS (inscrição e palestrante) */
-#inscricao,
-#palestrante {
-    background: white;
-    padding: 30px;
-    margin: 40px auto;
-    width: 80%;
+/* FORMULÁRIO */
+.form-container {
     max-width: 500px;
+    margin: 60px auto;
+    background: #f8fafc;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+    text-align: left;
+}
+
+.form-container input,
+.form-container textarea {
+    width: 100%;
+    background: #eef2f7;
+    border: none;
+    padding: 12px;
     border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-top: 5px;
 }
 
-/* INPUTS */
-#inscricao input,
-#palestrante input,
-#palestrante textarea {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-/* TEXTAREA */
-#palestrante textarea {
-    height: 100px;
-    resize: none;
-}
-
-/* BOTÃO */
-#inscricao button,
-#palestrante button {
+.form-container button {
+    width: 100%;
     background: #2563eb;
     color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
 }
 
-/* HOVER */
-#inscricao button:hover,
-#palestrante button:hover {
-    background: #1e40af;
-}
-/* TEMA CLARO (padrão) */
-body {
-    background-color: #ffffff;
-    color: #333;
+/* SLIDER */
+#tempoRange {
+    width: 100%;
+    margin: 10px 0;
 }
 
-/* TEMA ESCURO */
+/* TEXTO DO TEMPO*/
+#tempoValor {
+    text-align: center;
+    font-weight: bold;
+    color: #1e3a8a;
+    margin: 10px 0;
+    position: static; 
+}
+
+/* SUCESSO */
+.sucesso-box {
+    margin: 150px auto;
+    text-align: center;
+}
+
+.check {
+    font-size: 60px;
+}
+
+/* DARK MODE */
 body.dark {
     background-color: #121212;
     color: #ffffff;
 }
 
-/* NAVBAR DARK */
 body.dark header {
     background: #0f172a;
 }
 
-/* FORMULÁRIOS DARK */
-body.dark #inscricao,
-body.dark #palestrante {
+body.dark .form-container {
     background: #1e293b;
+}
+
+body.dark .form-container input,
+body.dark .form-container textarea {
+    background: #0f172a;
     color: white;
 }
 
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+}
 
-/* RESET E BÁSICO */
+.check-item input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.btn-voltar-icon {
+    background: white;
+    border: 1px solid #2563eb; 
+    color: #2563eb;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-voltar-icon:hover {
+    background: #f0f6ff; 
+    border-color: #1e3a8a;
+    color: #1e3a8a;
+}
+.erro-msg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #dc2626;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 14px;
+}
+/* efeito nos botões principais */
+.form-container button:hover {
+    background: white;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+/* efeito quando clica */
+.form-container button:active {
+    transform: scale(0.97);
+}
+/* efeito de expansão nos botões da tela inicial */
+#hero button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* quando passa o mouse */
+#hero button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* quando clica */
+#hero button:active {
+    transform: scale(0.98);
+}
+.logo-titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    width: 40px; 
+    height: auto;
+}
+header {
+  background-color: #1e3a8a; 
+}
+
+/* RESET */
 * {
-    padding: 0;
     margin: 0;
-    box-sizing: border-box; /* Importante para que o padding não quebre a largura */
+    padding: 0;
+    box-sizing: border-box;
 }
 
+/* BODY */
 body {
-    background-color: #f8faff;
-    overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    overflow-x: hidden;
 }
 
-/* SEÇÃO - SOBRE O TEMA */
-.sobre-tema {
-    background: linear-gradient(135deg, #033c75 0%, #035cc2 100%);
-    color: white;
-    text-align: center;
-    padding: 80px 20px; /* Padding reduzido para não "esmagar" no mobile */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* NAVBAR */
+header {
+    background: #1e3a8a;
+    padding: 15px 40px;
 }
 
-.description {
-    max-width: 950px;
-    margin: 1rem auto 2rem auto;
-    font-size: 1.2rem;
-    color: rgb(238, 238, 238);
-    line-height: 1.6;
-}
-
-#content-wrapper {
+nav {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap; /* Permite quebrar linha se não couber */
-    margin-top: 30px;
-}
-
-.tema-item {
-    background: rgba(255, 255, 255, 0.15); 
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 15px;
-    padding: 30px 15px;
-    width: 300px; /* Largura fixa para telas grandes que se ajustará no mobile */
-    display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
 }
 
-/* SEÇÃO - PROGRAMAÇÃO */
-.programacao-evento {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #003366;
-    background-color: rgb(250, 250, 250);
+nav h1 {
+    color: white;
 }
 
-.topicos-container {
+nav ul {
+    list-style: none;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    align-items: center;
     gap: 20px;
-    margin-top: 30px;
 }
 
-.topico {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: -8px 4px 6px rgba(0,0,0,0.05);
-    width: 280px;
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* LOGO */
+.logo-titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    width: 40px;
+    height: auto;
+}
+
+/* HERO */
+#hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+#hero h1 {
+    font-size: 40px;
+    color: #1e3a8a;
+}
+
+#hero h2 {
+    margin: 10px 0;
+    color: #2563eb;
+}
+
+#hero p {
+    margin: 10px 0;
+}
+
+/* BOTÕES */
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:first-child {
+    background: #2563eb;
+    color: white;
+}
+
+button:last-child {
+    background: transparent;
+    border: 2px solid #2563eb;
+    color: #2563eb;
+}
+
+/* FORMULÁRIO */
+.form-container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: #f8fafc;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
     text-align: left;
 }
 
-.presentation-box {
-    background: #fff;
-    margin: auto;
-    margin-top: 1.5rem;
-    max-width: 400px;
-    padding: 5px 10px;
+.form-container input,
+.form-container textarea {
+    width: 100%;
+    background: #eef2f7;
+    border: none;
+    padding: 12px;
     border-radius: 10px;
-    box-shadow: 8px 4px 6px rgba(0,0,0,0.05), 8px 4px 6px rgba(0,0,0,0.05);
+    margin-top: 5px;
 }
 
-/* SEÇÃO - PALESTRANTES */
-.palestrantes {
+.form-container button {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* SLIDER */
+#tempoRange {
+    width: 100%;
+    margin: 10px 0;
+}
+
+#tempoValor {
     text-align: center;
-    background-color: rgb(226, 238, 248);
-    padding: 60px 20px;
-    font-family: 'Lucida Sans', sans-serif;
-    color: #003366;
+    font-weight: bold;
+    color: #1e3a8a;
+    margin: 10px 0;
 }
 
-#palestrantes-container {
+/* CHECKBOX */
+.check-item {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 30px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    cursor: pointer;
 }
 
-.card-palestrante {
+.check-item input {
+    width: 16px;
+    height: 16px;
+}
+
+/* ERRO */
+.erro-msg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #dc2626;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* SUCESSO */
+.sucesso-box {
+    margin: 150px auto;
+    text-align: center;
+}
+
+.check {
+    font-size: 60px;
+}
+
+/* BOTÃO VOLTAR */
+.btn-voltar-icon {
     background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    width: 250px;
-    transition: transform 0.3s ease;
+    border: 1px solid #2563eb;
+    color: #2563eb;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-.card-palestrante img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0 auto 15px auto;
-    display: block;
+.btn-voltar-icon:hover {
+    background: #f0f6ff;
+    border-color: #1e3a8a;
+    color: #1e3a8a;
 }
 
-/* 
-   -------------------------------------------------------
-   RESPONSIVIDADE (CELULAR - ATÉ 768px)
-   -------------------------------------------------------
-*/
+/* HOVER BOTÕES */
+.form-container button:hover {
+    background: white;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+.form-container button:active {
+    transform: scale(0.97);
+}
+
+/* HERO BOTÕES ANIMAÇÃO */
+#hero button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#hero button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+#hero button:active {
+    transform: scale(0.98);
+}
+
+/* DARK MODE */
+body.dark {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark header {
+    background: #0f172a;
+}
+
+body.dark .form-container {
+    background: #1e293b;
+}
+
+body.dark .form-container input,
+body.dark .form-container textarea {
+    background: #0f172a;
+    color: white;
+}
+
+/* RESPONSIVO TABLET */
+@media (max-width: 1024px) {
+    #hero h1 {
+        font-size: 34px;
+    }
+
+    .form-container {
+        margin: 40px 20px;
+    }
+}
+
+/* RESPONSIVO CELULAR */
 @media (max-width: 768px) {
-    
-    /* Força os containers a virarem coluna */
-    #content-wrapper, 
-    #palestrantes-container,
-    .topicos-container {
+
+    header {
+        padding: 15px 20px;
+    }
+
+  nav {
+    flex-direction: row;
+    justify-content: space-between;
+}  
+
+    nav ul {
         flex-direction: column;
+        gap: 10px;
+    }
+
+    #hero {
+        padding: 50px 15px;
+    }
+
+    #hero h1 {
+        font-size: 26px;
+    }
+
+    #hero h2 {
+        font-size: 18px;
+    }
+
+    button {
+        width: 100%;
+        margin: 8px 0;
+    }
+
+    .form-container {
+        margin: 30px 15px;
+        padding: 25px;
+    }
+}
+
+/* RESPONSIVO CELULAR PEQUENO */
+@media (max-width: 480px) {
+
+    #hero h1 {
+        font-size: 22px;
+    }
+
+    .logo-img {
+        width: 30px;
+    }
+}
+
+/* IMAGENS RESPONSIVAS */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===== MENU MOBILE LIMPO ===== */
+
+/* escondido no PC */
+#menu-btn {
+    display: none;
+}
+
+#fechar-menu {
+    display: none;
+}
+
+/* ===== MENU MOBILE ===== */
+
+/* botão escondido no PC */
+#menu-btn {
+    display: none;
+}
+
+/* ===== MENU MOBILE ===== */
+
+@media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
         align-items: center;
     }
 
-    /* Faz os itens ocuparem quase toda a largura da tela */
-    .tema-item, 
-    .card-palestrante,
-    .topico {
-        width: 100%;
-        max-width: 350px; /* Limita para não ficar largo demais em tablets */
+    /* botão ☰ colado na direita */
+    #menu-btn {
+        display: block;
+        font-size: 28px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
     }
 
-    /* Ajusta os paddings das seções para ganhar espaço lateral */
-    .sobre-tema, .palestrantes, .programacao-evento {
-        padding: 40px 15px;
+    /* MENU vindo da direita */
+    #menu {
+        position: fixed;
+        top: 0;
+        right: -280px; 
+        width: 260px;
+        height: 100vh;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+        transition: 0.3s ease;
+        z-index: 2000;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.2);
     }
 
-    .description {
-        font-size: 1rem;
-        text-align: center;
+    #menu.active {
+        right: 0; 
     }
 
-    h1 {
-        font-size: 1.5rem;
+    /* botão fechar */
+    #fechar-menu {
+        align-self: flex-end;
+        font-size: 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #1e3a8a;
+    }
+
+    #menu a {
+        color: #1e3a8a;
+        text-decoration: none;
+        font-weight: bold;
     }
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/script.js" defer></script>
+<title>Palestrante</title>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Inscrição de Palestrante</h2>
+    <p>Envie sua proposta de palestra</p>
+
+    <input type="text" placeholder="Nome completo" class="campo-obrigatorio">
+    <input type="text" placeholder="DDD + Telefone" class="campo-obrigatorio campo-telefone">
+    <input type="email" placeholder="Email" class="campo-obrigatorio campo-email">
+    <input type="text" placeholder="Tema da palestra" class="campo-obrigatorio">
+    
+
+    <textarea placeholder="Descreva sua palestra" class="campo-obrigatorio"></textarea>
+
+    <label class="check-item">
+    <input type="checkbox">
+    <span>Possuo experiência como palestrante</span>
+    </label>
+
+    <label class="check-item">
+    <input type="checkbox">
+    <span>Preciso de equipamentos (projetor, som, etc)</span>
+    </label>
+
+    <!-- 🔵 SLIDER NO LUGAR QUE VOCÊ QUER -->
+    <label for="tempoRange">Tempo Necessário (minutos) *</label>
+
+    <input 
+        type="range" 
+        min="40" 
+        max="60" 
+        step="5" 
+        value="40" 
+        id="tempoRange"
+    />
+
+    <p id="tempoValor">40 minutos</p>
+
+    <p>As palestras devem ter entre 40 e 60 minutos</p>
+
+    <!-- 🔘 BOTÃO LOGO ABAIXO -->
+    <button onclick="finalizar()">Enviar proposta</button>
+    <button class="btn-voltar-icon" onclick="voltarPagina()">
+    ← voltar
+    </button>
+</div>
+
+</body>
+</html>
