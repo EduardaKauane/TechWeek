@@ -1,49 +1,45 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/style.css">
-<script src="js/script.js" defer></script>
-<title>Inscrição</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/css/style.css">
+    <script src="js/script.js" defer></script>
+    <title>Inscrição</title>
 </head>
 
 <body>
+    <div class="form-container">
+        <h2>Inscrição de Participante</h2>
+        <p>Preencha os dados abaixo</p>
 
-<div class="form-container">
+        <input type="text" placeholder="Nome completo" class="campo-obrigatorio">
+        <input type="text" placeholder="RA" class="campo-obrigatorio campo-ra">
+        <input type="text" placeholder="Curso" class="campo-obrigatorio">
+        <input type="text" placeholder="Semestre" class="campo-obrigatorio">
 
-    <h2>Inscrição de Participante</h2>
-    <p>Preencha os dados abaixo</p>
+        <label class="check-item">
+            <input type="checkbox">
+            <span>Desejo participar do Coffee Break</span>
+        </label>
 
-    <input type="text" placeholder="Nome completo" class="campo-obrigatorio">
-    <input type="text" placeholder="RA" class="campo-obrigatorio campo-ra">
-    <input type="text" placeholder="Curso" class="campo-obrigatorio">
-    <input type="text" placeholder="Semestre" class="campo-obrigatorio">
+        <!-- CHECK PROJETO -->
+        <label class="check-item">
+            <input type="checkbox" id="checkProjeto">
+            <span>Desejo apresentar um projeto</span>
+        </label>
 
-    <label class="check-item">
-        <input type="checkbox">
-        <span>Desejo participar do Coffee Break</span>
-    </label>
+        <!-- CAMPOS QUE APARECEM -->
+        <div id="camposProjeto" style="display: none;">
+            <input type="text" placeholder="Digite o título do seu projeto" class="campo-obrigatorio"><br>
+            <textarea placeholder="Descreva seu projeto" class="campo-obrigatorio"></textarea><br>
+        </div>
 
-    <!-- CHECK PROJETO -->
-    <label class="check-item">
-        <input type="checkbox" id="checkProjeto">
-        <span>Desejo apresentar um projeto</span>
-    </label>
+        <button class="btn-confirmar" onclick="finalizar()">Confirmar Inscrição</button>
 
-    <!-- CAMPOS QUE APARECEM -->
-    <div id="camposProjeto" style="display: none;">
-        <input type="text" placeholder="Digite o título do seu projeto" class="campo-obrigatorio"><br>
-        <textarea placeholder="Descreva seu projeto" class="campo-obrigatorio"></textarea><br>
+        <button class="btn-voltar-icon" onclick="voltarPagina()">
+            ← voltar
+        </button>
     </div>
-
-    <button onclick="finalizar()">Confirmar Inscrição</button>
-
-    <button class="btn-voltar-icon" onclick="voltarPagina()">
-        ← voltar
-    </button>
-
-</div>
-
 </body>
 </html>
