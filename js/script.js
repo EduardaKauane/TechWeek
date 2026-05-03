@@ -1,3 +1,14 @@
+// scroll suave p links internos
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
 document.addEventListener("DOMContentLoaded", () => {
 
     // SLIDER (só funciona se existir)
@@ -183,32 +194,6 @@ function mostrarPalestrante() {
     }
 }
 
-function toggleTema() {
-    const body = document.body;
-    const btn = document.querySelector("button[aria-label='Alternar tema claro/escuro']");
-    
-    if (!btn) return;
-    
-    body.classList.toggle("dark");
-    
-    const isDark = body.classList.contains("dark");
-    
-    btn.innerHTML = isDark 
-        ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="m4.93 4.93 1.41 1.41"></path>
-            <path d="m17.66 17.66 1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="m6.34 17.66-1.41 1.41"></path>
-            <path d="m19.07 4.93-1.41 1.41"></path>
-          </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-          </svg>`;
-}
 
 function finalizar() {
     const campos = document.querySelectorAll(".campo-obrigatorio");
@@ -297,4 +282,42 @@ function finalizar() {
 
 function voltarPagina() {
     window.history.back();
+}
+
+// FAQ
+document.querySelectorAll(".faq-perguntas").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        const answer = document.getElementById(btn.getAttribute("aria-controls"));
+        btn.setAttribute("aria-expanded", !expanded);
+        answer.hidden = expanded;
+    });
+});
+
+// dark mode
+function toggleTema() {
+    const body = document.body;
+    const btn = document.querySelector("button[aria-label='Alternar tema claro/escuro']");
+    
+    if (!btn) return;
+    
+    body.classList.toggle("dark");
+    
+    const isDark = body.classList.contains("dark");
+    
+    btn.innerHTML = isDark 
+        ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>`;
 }
