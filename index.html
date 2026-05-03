@@ -5,62 +5,354 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>II Tech Week</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230066cc'/><text x='50' y='65' font-size='60' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial'>TW</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="src/css/style.css">
+    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="stylesheet" href="src/css/footer.css">
+    <link rel="stylesheet" href="src/css/responsive.css">
     <script src="js/script.js" defer></script>
 </head>
-
 <body>
+    <header>
+        <nav>
+            <h1 class="logo-titulo">
+                <img src="src/imgs/unicesumar-removebg-preview.png" alt="Logo" class="logo-img">
+                Tech Week
+            </h1>
 
-<header>
-    <nav>
+            <!-- BOTÃO MENU -->
+            <button id="menu-btn">☰</button>
 
-        <h1 class="logo-titulo">
-            <img src="js/unicesumar-removebg-preview.png" alt="Logo" class="logo-img">
-            Tech Week
-        </h1>
+            <ul id="menu">
+                <li>
+                    <button id="fechar-menu">✕</button>
+                </li>
+                <li><a href="#">Programação</a></li>
+                <li><a href="#">Palestrantes</a></li>
+                <li><a href="#">Localização</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Login</a></li>
+                <button type="button" aria-label="Alternar tema claro/escuro" onclick="toggleTema()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon w-5 h-5">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                    </svg>
+                </button>
+            </ul>
+        </nav>
+    </header>
 
-        <!-- BOTÃO MENU -->
-        <button id="menu-btn">☰</button>
+    <main>
+        <section id="hero">
+            <p id="data-evento">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-4 h-4">
+                    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                    <path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path>
+                </svg>
+                1 a 3 de Junho, 2026
+            </p>
 
-        <!-- MENU -->
-       <ul id="menu">
-    
-       <li>
-        <button id="fechar-menu">✕</button>
-       </li>
-       <button onclick="toggleTema()" id="tema-btn">☽</button>
-       <li><a href="#">Programação</a></li>
-       <li><a href="#">Palestrantes</a></li>
-       <li><a href="#">Localização</a></li>
-       <li><a href="#">Patrocinadores</a></li>
-       <li><a href="#">Login</a></li>
+            <h1>II Tech Week</h1>
+            <h2>Inteligência Artificial em Ação</h2>
+            <p>Dados, Inovação e Transformação Digital</p>
 
-       </ul>
+            <div class="hero-buttons">
+                <button type="button" class="btn-inscricao" onclick="window.location.href='participante.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users w-5 h-5">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    Quero participar
+                </button>
+                <button type="button" class="btn-palestrante" onclick="window.location.href='palestrante.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic w-5 h-5">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" x2="12" y1="19" y2="22"></line>
+                    </svg>
+                    Sou palestrante
+                </button>
+            </div>
+            <a href="#programacao-evento" class="scroll-link">
+                <svg class="seta-animada" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m6 9 6 6 6-6"/>
+                </svg>
+            </a>
+        </section>
+    </main>
 
-    </nav>
-</header>
+    <!-- SEÇÃO - SOBRE O TEMA -->
+    <section class="sobre-tema">
+        <h1>Sobre o Tema</h1>
+        <p class="description">A II Tech Week propõe uma abordagem prática e contemporânea sobre o uso da Inteligência Artificial, destacando sua aplicação real em diferentes contextos organizacionais e sociais. O tema enfatiza não apenas a compreensão teórica, mas principalmente a vivência e experimentação das tecnologias que estão moldando o presente.</p>
 
-<main>
-    <section id="hero">
-        <p>✧ 1 a 3 de junho, 2026</p>
-
-        <h1>II Tech Week</h1>
-        <h2>Inteligência Artificial em Ação</h2>
-
-        <p>Dados, Inovação e Transformação Digital</p>
-        <p>Evento gratuito e aberto ao público.</p> 
-
-        <div>
-            <button onclick="window.location.href='participante.html'">
-                Quero Participar
-            </button>
-
-            <button onclick="window.location.href='palestrante.html'">
-                Sou Palestrante
-            </button>
+        <div id="content-wrapper">
+            <div class="tema-item">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database w-8 h-8">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
+                        <path d="M3 12A9 3 0 0 0 21 12"></path>
+                    </svg>
+                </div>
+                <h2>Dados</h2>
+                <p>Coletar, analisar e interpretar dados para decisões estratégicas</p>
+            </div>
+            <div class="tema-item">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-8 h-8">
+                        <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                        <path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path>
+                    </svg>
+                </div>
+                <h2>Inovação</h2>
+                <p>Algoritmos inteligentes impulsionando soluções personalizadas</p>
+            </div>
+            <div class="tema-item">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain w-8 h-8">
+                        <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path>
+                        <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path>
+                        <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                        <path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path>
+                        <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path>
+                        <path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path>
+                        <path d="M19.938 10.5a4 4 0 0 1 .585.396"></path>
+                        <path d="M6 18a4 4 0 0 1-1.967-.516"></path>
+                        <path d="M19.967 17.484A4 4 0 0 1 18 18"></path>
+                    </svg>
+                </div>
+                <h2>Transformação</h2>
+                <p>IA aplicada em saúde, educação, negócios e gestão pública</p>
+            </div>
         </div>
     </section>
-</main>
 
+    <!-- SEÇÃO - PROGRAMAÇÃO -->
+    <section id="programacao-evento" class="programacao-evento">
+        <h1>Programação</h1>
+
+        <div class="topicos-container">
+            <div class="topico">
+                <div class="icon-calendario">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-6 h-6">
+                        <path d="M8 2v4"></path>
+                        <path d="M16 2v4"></path>
+                        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                        <path d="M3 10h18"></path>
+                    </svg>
+                </div>
+                <div class="info-topico">
+                    <p class="paragrafo-horario">Segunda-feira  •  19:00 - 21:00</p>
+                    <h2>Machine Learning na Prática</h2>
+                    <h3>Dra. Ana Silva</h3>
+                    <p>Explorando aplicações reais de ML em diferentes setores</p>
+                </div>
+            </div>
+            <div class="topico">
+                <div class="icon-calendario">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-6 h-6">
+                        <path d="M8 2v4"></path>
+                        <path d="M16 2v4"></path>
+                        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                        <path d="M3 10h18"></path>
+                    </svg>
+                </div>
+                <div class="info-topico">
+                    <p class="paragrafo-horario">Terça-feira  •  19:00 - 21:00</p>
+                    <h2>Deep Learning e Visão Computacional</h2>
+                    <h3>Prof. Carlos Mendes</h3>
+                    <p>Como a IA está revolucionando o processamento de imagens</p>
+                </div>
+            </div>
+            <div class="topico">
+                <div class="icon-calendario">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-6 h-6">
+                        <path d="M8 2v4"></path>
+                        <path d="M16 2v4"></path>
+                        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                        <path d="M3 10h18"></path>
+                    </svg>
+                </div>
+                <div class="info-topico">
+                    <p class="paragrafo-horario">Quarta-feira  •  19:00 - 21:00</p>
+                    <h2>IA na Saúde Digital</h2>
+                    <h3>Dra. Beatriz Costa</h3>
+                    <p>Transformação digital nos cuidados médicos com IA</p>
+                </div>
+            </div>
+            <div class="topico">
+                <div class="icon-calendario">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-6 h-6">
+                        <path d="M8 2v4"></path>
+                        <path d="M16 2v4"></path>
+                        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                        <path d="M3 10h18"></path>
+                    </svg>
+                </div>
+                <div class="info-topico">
+                    <p class="paragrafo-horario">Quinta-feira  •  19:00 - 21:00</p>
+                    <h2>Ética e Inteligência Artificial</h2>
+                    <h3>Prof. Roberto Alves</h3>
+                    <p>Desafios éticos no desenvolvimento de sistemas inteligentes</p>
+                </div>
+            </div>
+        </div>
+        <div class="presentation-box">
+            <h2>Apresentação de Projetos</h2>
+            <h3>Quarta-feira será dedicada à apresentação de trabalhos e projetos dos alunos</h3>
+            <p>Inscreva-se como participante e marque a opção de apresentar seu projeto!</p>
+        </div>
+    </section>
+
+    <!-- SEÇÃO - PALESTRANTES -->
+    <section id="palestrantes" class="palestrantes">
+        <h1>Palestrantes</h1>
+        <p>Profissionais renomados compartilhando conhecimento e experiências.</p>
+
+        <div id="palestrantes-container">
+            <div class="card-palestrante">
+                <img src="imgs/unicesumar-logo.png" alt="Foto de Dra. Ana Silva">
+                <h2>Dra. Ana Silva</h2>
+                <p>Machine Learning na Prática</p>
+            </div>
+            <div class="card-palestrante">
+                <img src="imgs/unicesumar-logo.png" alt="Foto de Prof. Carlos Mendes">
+                <h2>Prof. Carlos Mendes</h2>
+                <p>Deep Learning e Visão Computacional</p>
+            </div>
+            <div class="card-palestrante">
+                <img src="imgs/unicesumar-logo.png" alt="Foto de Dra. Beatriz Costa">
+                <h2>Dra. Beatriz Costa</h2>
+                <p>IA na Saúde Digital</p>
+            </div>
+            <div class="card-palestrante">
+                <img src="imgs/unicesumar-logo.png" alt="Foto de Prof. Roberto Alves">
+                <h2>Prof. Roberto Alves</h2>
+                <p>Ética e Inteligência Artificial</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO - FAQ -->
+    <section class="faq" id="faq">
+        <div class="faq-header">
+            <h1>Perguntas Frequentes</h1>
+            <p>Tire suas dúvidas sobre a Tech Week</p>
+        </div>
+
+        <div class="faq-lista">
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq1">
+                    Onde será o evento?
+                </button>
+                <div id="faq1" class="faq-respostas" hidden>
+                    Campus Unicesumar Londrina - Av. Santa Mônica
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq2">
+                    Quando acontece a Tech Week?
+                </button>
+                <div id="faq2" class="faq-respostas" hidden>
+                    De 5 a 9 de maio de 2026
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq3">
+                    Preciso pagar para participar?
+                </button>
+                <div id="faq3" class="faq-respostas" hidden>
+                    Não, o evento é gratuito.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq4">
+                    Vou receber certificado?
+                </button>
+                <div id="faq4" class="faq-respostas" hidden>
+                    Sim, mediante presença confirmada.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq5">
+                    Haverá coffee break?
+                </button>
+                <div id="faq5" class="faq-respostas" hidden>
+                    Sim, para participantes inscritos.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq6">
+                    Posso apresentar meu projeto?
+                </button>
+                <div id="faq6" class="faq-respostas" hidden>
+                    Sim! Marque a opção no formulário de inscrição.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq7">
+                    Como funciona a confirmação de presença?
+                </button>
+                <div id="faq7" class="faq-respostas" hidden>
+                    Será feita via QR Code ao final do evento.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq8">
+                    Quem pode se inscrever como palestrante?
+                </button>
+                <div id="faq8" class="faq-respostas" hidden>
+                    Alunos e profissionais com temas relevantes.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq9">
+                    Qual a duração das palestras?
+                </button>
+                <div id="faq9" class="faq-respostas" hidden>
+                    Entre 40 e 60 minutos.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-perguntas" aria-expanded="false" aria-controls="faq10">
+                    Como entro em contato com a organização?
+                </button>
+                <div id="faq10" class="faq-respostas" hidden>
+                    techweek@unicesumar.edu.br
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-contato">
+            <p>Não encontrou a resposta que procurava?</p>
+            <p>
+                Entre em contato com o Suporte:
+                <a href="mailto:techweek@unicesumar.edu.br">
+                    techweek@unicesumar.edu.br
+                </a>
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <h2>II Tech Week - Unicesumar</h2>
+        <p id="tema-footer">Inteligência Artificial em Ação: Dados, Inovação e Transformação Digital</p>
+        <p>© 2026 Unicesumar. Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
 </body>
 </html>
