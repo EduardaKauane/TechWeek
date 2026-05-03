@@ -68,20 +68,25 @@ nav button:hover {
 #hero {
     text-align: center;
     padding: 80px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #hero h1 {
-    font-size: 40px;
-    color: #1e3a8a;
+    font-size: 60px;
+    color: #19337a;
+    margin-bottom: 16px;
 }
 
 #hero h2 {
     margin: 10px 0;
-    color: #2563eb;
+    margin-bottom: 12px;
+    color: #2857bd;
 }
 
 #hero p {
+    font-size: 18px;
     margin: 10px 0;
+    color: rgb(41, 77, 153);
 }
 
 #hero #data-evento {
