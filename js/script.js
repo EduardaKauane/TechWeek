@@ -95,17 +95,13 @@ camposObrigatorios.forEach(campo => {
 
     if (campoEmailLive) {
 
+        let msg = document.createElement("div");
+        msg.className = "email-msg";
+        campoEmailLive.insertAdjacentElement("afterend", msg);
+
         campoEmailLive.addEventListener("input", () => {
             const email = campoEmailLive.value.trim();
             const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-            let msg = document.querySelector(".email-msg");
-
-            if (!msg) {
-                msg = document.createElement("div");
-                msg.className = "email-msg";
-                campoEmailLive.parentNode.appendChild(msg);
-            }
 
             if (email.length === 0) {
                 msg.textContent = "";
