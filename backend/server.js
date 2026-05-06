@@ -2,6 +2,7 @@ const express = require('express');
 const cors    = require('cors');
 const fs      = require('fs');
 const path    = require('path');
+const multer  = require('multer');
 const { Resend } = require('resend');
 require('dotenv').config();
 
@@ -11,16 +12,34 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 app.use(cors());
 app.use(express.json());
 
+// ── Uploads ────────────────────────────────────────────────────────────────────
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
+
+app.use('/uploads', express.static(UPLOADS_DIR));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, UPLOADS_DIR),
+  filename:    (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, `${Date.now()}${ext}`);
+  }
+});
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+
 // ── Banco de dados JSON ────────────────────────────────────────────────────────
 const DB_PATH = path.join(__dirname, 'db.json');
 
 function readDB() {
   if (!fs.existsSync(DB_PATH)) {
-    const empty = { participantes: [], palestrantes: [], coffeeBreak: [], projetos: [] };
+    const empty = { participantes: [], palestrantes: [], coffeeBreak: [], projetos: [], eventSpeakers: [], eventSchedule: [] };
     fs.writeFileSync(DB_PATH, JSON.stringify(empty, null, 2));
     return empty;
   }
-  return JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
+  const db = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
+  if (!db.eventSpeakers) db.eventSpeakers = [];
+  if (!db.eventSchedule) db.eventSchedule = [];
+  return db;
 }
 
 function writeDB(data) {
@@ -74,6 +93,82 @@ app.delete('/inscricao/:tipo/:id', (req, res) => {
   if (!db[tipo]) return res.status(400).json({ success: false, error: 'Tipo inválido' });
 
   db[tipo] = db[tipo].filter(i => i.id != id);
+  writeDB(db);
+  res.json({ success: true });
+});
+
+// ── GET /event-speakers ────────────────────────────────────────────────────────
+app.get('/event-speakers', (req, res) => {
+  res.json(readDB().eventSpeakers);
+});
+
+// ── POST /event-speakers ───────────────────────────────────────────────────────
+app.post('/event-speakers', upload.single('foto'), (req, res) => {
+  const db = readDB();
+  const { nome, cargo, empresa, bio, tema, linkedin } = req.body;
+  const foto = req.file ? `/uploads/${req.file.filename}` : null;
+  const item = { id: Date.now(), nome, cargo, empresa, bio, tema, linkedin, foto };
+  db.eventSpeakers.push(item);
+  writeDB(db);
+  console.log(`✅ Palestrante do evento adicionado → ${nome}`);
+  res.json({ success: true, item });
+});
+
+// ── PATCH /event-speakers/:id ──────────────────────────────────────────────────
+app.patch('/event-speakers/:id', upload.single('foto'), (req, res) => {
+  const db   = readDB();
+  const item = db.eventSpeakers.find(s => s.id == req.params.id);
+  if (!item) return res.status(404).json({ success: false, error: 'Não encontrado' });
+
+  const fields = ['nome', 'cargo', 'empresa', 'bio', 'tema', 'linkedin'];
+  fields.forEach(f => { if (req.body[f] !== undefined) item[f] = req.body[f]; });
+  if (req.file) item.foto = `/uploads/${req.file.filename}`;
+  writeDB(db);
+  res.json({ success: true, item });
+});
+
+// ── DELETE /event-speakers/:id ─────────────────────────────────────────────────
+app.delete('/event-speakers/:id', (req, res) => {
+  const db   = readDB();
+  const item = db.eventSpeakers.find(s => s.id == req.params.id);
+  if (item?.foto) {
+    const filePath = path.join(__dirname, item.foto);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  }
+  db.eventSpeakers = db.eventSpeakers.filter(s => s.id != req.params.id);
+  writeDB(db);
+  res.json({ success: true });
+});
+
+// ── GET /event-schedule ────────────────────────────────────────────────────────
+app.get('/event-schedule', (req, res) => {
+  res.json(readDB().eventSchedule);
+});
+
+// ── POST /event-schedule ───────────────────────────────────────────────────────
+app.post('/event-schedule', (req, res) => {
+  const db   = readDB();
+  const item = { id: Date.now(), ...req.body };
+  db.eventSchedule.push(item);
+  writeDB(db);
+  console.log(`✅ Programação adicionada → ${item.titulo}`);
+  res.json({ success: true, item });
+});
+
+// ── PATCH /event-schedule/:id ──────────────────────────────────────────────────
+app.patch('/event-schedule/:id', (req, res) => {
+  const db   = readDB();
+  const item = db.eventSchedule.find(s => s.id == req.params.id);
+  if (!item) return res.status(404).json({ success: false, error: 'Não encontrado' });
+  Object.assign(item, req.body);
+  writeDB(db);
+  res.json({ success: true, item });
+});
+
+// ── DELETE /event-schedule/:id ─────────────────────────────────────────────────
+app.delete('/event-schedule/:id', (req, res) => {
+  const db = readDB();
+  db.eventSchedule = db.eventSchedule.filter(s => s.id != req.params.id);
   writeDB(db);
   res.json({ success: true });
 });

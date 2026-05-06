@@ -33,6 +33,10 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         Relatórios
       </button>
+      <button class="tab-btn" id="tab-btn-evento" onclick="switchTab('evento')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+        Evento
+      </button>
     </div>
 
     <!-- Dashboard Tab -->
@@ -191,6 +195,128 @@
       </div>
       <div id="relatorios-content"></div>
     </div>
+
+    <!-- Evento Tab -->
+    <div id="tab-evento" class="hidden">
+
+      <!-- Palestrantes do Evento -->
+      <div class="card section">
+        <div class="section-header">
+          <div class="section-title">
+            <div class="section-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+            </div>
+            <h2>Palestrantes do Evento (<span id="count-event-speakers">0</span>)</h2>
+          </div>
+          <button class="btn btn-add" onclick="toggleEventForm('speaker-form')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+            Adicionar Palestrante
+          </button>
+        </div>
+
+        <div id="speaker-form" class="event-form hidden">
+          <div class="event-form-grid">
+            <div class="event-field">
+              <label>Nome *</label>
+              <input id="sp-nome" type="text" placeholder="Nome completo">
+            </div>
+            <div class="event-field">
+              <label>Cargo / Título</label>
+              <input id="sp-cargo" type="text" placeholder="Ex: Professora, CEO">
+            </div>
+            <div class="event-field">
+              <label>Empresa / Instituição</label>
+              <input id="sp-empresa" type="text" placeholder="Ex: Unicesumar">
+            </div>
+            <div class="event-field">
+              <label>Tema da Palestra</label>
+              <input id="sp-tema" type="text" placeholder="Ex: IA na Saúde">
+            </div>
+            <div class="event-field">
+              <label>LinkedIn URL</label>
+              <input id="sp-linkedin" type="text" placeholder="https://linkedin.com/in/...">
+            </div>
+            <div class="event-field">
+              <label>Foto do Palestrante</label>
+              <input id="sp-foto" type="file" accept="image/*" class="file-input">
+              <div id="sp-foto-preview" class="foto-preview hidden"></div>
+            </div>
+            <div class="event-field full-width">
+              <label>Bio</label>
+              <textarea id="sp-bio" placeholder="Breve biografia do palestrante"></textarea>
+            </div>
+          </div>
+          <div class="event-form-actions">
+            <button class="btn btn-secondary" onclick="toggleEventForm('speaker-form')">Cancelar</button>
+            <button class="btn btn-accept" onclick="addEventSpeaker()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Salvar Palestrante
+            </button>
+          </div>
+        </div>
+
+        <div id="event-speakers-list" class="event-items-list"></div>
+      </div>
+
+      <!-- Programação do Evento -->
+      <div class="card section">
+        <div class="section-header">
+          <div class="section-title">
+            <div class="section-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg>
+            </div>
+            <h2>Programação do Evento (<span id="count-event-schedule">0</span>)</h2>
+          </div>
+          <button class="btn btn-add" onclick="toggleEventForm('schedule-form')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+            Adicionar Programação
+          </button>
+        </div>
+
+        <div id="schedule-form" class="event-form hidden">
+          <div class="event-form-grid">
+            <div class="event-field">
+              <label>Data</label>
+              <input id="sc-data" type="text" placeholder="Ex: Segunda, 01/06">
+            </div>
+            <div class="event-field">
+              <label>Horário</label>
+              <input id="sc-horario" type="text" placeholder="Ex: 19:00 - 21:00">
+            </div>
+            <div class="event-field">
+              <label>Título *</label>
+              <input id="sc-titulo" type="text" placeholder="Título da palestra ou atividade">
+            </div>
+            <div class="event-field">
+              <label>Palestrante</label>
+              <input id="sc-palestrante" type="text" placeholder="Nome do palestrante">
+            </div>
+            <div class="event-field">
+              <label>Local / Sala</label>
+              <input id="sc-local" type="text" placeholder="Ex: Auditório A">
+            </div>
+            <div class="event-field">
+              <label>Duração</label>
+              <input id="sc-duracao" type="text" placeholder="Ex: 60 min">
+            </div>
+            <div class="event-field full-width">
+              <label>Descrição</label>
+              <textarea id="sc-descricao" placeholder="Descreva brevemente esta atividade"></textarea>
+            </div>
+          </div>
+          <div class="event-form-actions">
+            <button class="btn btn-secondary" onclick="toggleEventForm('schedule-form')">Cancelar</button>
+            <button class="btn btn-accept" onclick="addEventSchedule()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Salvar na Programação
+            </button>
+          </div>
+        </div>
+
+        <div id="event-schedule-list" class="event-items-list"></div>
+      </div>
+
+    </div> <!-- end tab-evento -->
 
   </div>
 

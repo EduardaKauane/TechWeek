@@ -12,6 +12,7 @@ async function loadData() {
     showToast('error', 'Servidor offline. Verifique se o backend está rodando.');
   }
   render();
+  loadEventData();
 }
 
 async function apiPatch(tipo, id, status) {
@@ -441,11 +442,199 @@ function render() {
 // ── Tab switching ──────────────────────────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
-  document.getElementById('tab-dashboard').classList.toggle('hidden', tab !== 'dashboard');
-  document.getElementById('tab-relatorios').classList.toggle('hidden', tab !== 'relatorios');
-  document.getElementById('tab-btn-dashboard').classList.toggle('active', tab === 'dashboard');
-  document.getElementById('tab-btn-relatorios').classList.toggle('active', tab === 'relatorios');
+  ['dashboard', 'relatorios', 'evento'].forEach(t => {
+    document.getElementById(`tab-${t}`).classList.toggle('hidden', tab !== t);
+    document.getElementById(`tab-btn-${t}`).classList.toggle('active', tab === t);
+  });
   if (tab === 'relatorios') renderRelatorios();
+  if (tab === 'evento') renderEventTab();
+}
+
+// ── Event Management ───────────────────────────────────────────────────────────
+let eventSpeakers = [];
+let eventSchedule = [];
+
+async function loadEventData() {
+  try {
+    const [sRes, schRes] = await Promise.all([
+      fetch(`${API}/event-speakers`),
+      fetch(`${API}/event-schedule`)
+    ]);
+    eventSpeakers = await sRes.json();
+    eventSchedule = await schRes.json();
+    renderEventTab();
+  } catch { /* silently fail */ }
+}
+
+function renderEventTab() {
+  renderEventSpeakers();
+  renderEventSchedule();
+}
+
+function toggleEventForm(formId) {
+  const form = document.getElementById(formId);
+  form.classList.toggle('hidden');
+}
+
+// ── Speakers ───────────────────────────────────────────────────────────────────
+function renderEventSpeakers() {
+  const list    = document.getElementById('event-speakers-list');
+  const counter = document.getElementById('count-event-speakers');
+  if (!list) return;
+  if (counter) counter.textContent = eventSpeakers.length;
+
+  if (eventSpeakers.length === 0) {
+    list.innerHTML = `<div class="empty-state"><p>Nenhum palestrante cadastrado ainda</p></div>`;
+    return;
+  }
+
+  list.innerHTML = eventSpeakers.map(s => `
+    <div class="event-item-card" data-id="${s.id}">
+      <div class="event-item-photo">
+        ${s.foto
+          ? `<img src="${API}${s.foto}" alt="${s.nome}">`
+          : `<div class="photo-placeholder"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>`}
+      </div>
+      <div class="event-item-info">
+        <strong class="event-item-name">${s.nome}</strong>
+        ${s.cargo || s.empresa ? `<span class="event-item-sub">${[s.cargo, s.empresa].filter(Boolean).join(' · ')}</span>` : ''}
+        ${s.tema ? `<span class="event-item-tag">${s.tema}</span>` : ''}
+        ${s.bio  ? `<p class="event-item-bio">${s.bio}</p>` : ''}
+        ${s.linkedin ? `<a href="${s.linkedin}" target="_blank" class="event-item-link">LinkedIn ↗</a>` : ''}
+      </div>
+      <button class="btn btn-delete-mini" onclick="deleteEventSpeaker(${s.id})" title="Excluir palestrante">${trashSVG}</button>
+    </div>`).join('');
+}
+
+async function addEventSpeaker() {
+  const nome = document.getElementById('sp-nome').value.trim();
+  if (!nome) { showToast('error', 'Nome é obrigatório'); return; }
+
+  const formData = new FormData();
+  formData.append('nome',     nome);
+  formData.append('cargo',    document.getElementById('sp-cargo').value.trim());
+  formData.append('empresa',  document.getElementById('sp-empresa').value.trim());
+  formData.append('tema',     document.getElementById('sp-tema').value.trim());
+  formData.append('bio',      document.getElementById('sp-bio').value.trim());
+  formData.append('linkedin', document.getElementById('sp-linkedin').value.trim());
+
+  const fotoFile = document.getElementById('sp-foto').files[0];
+  if (fotoFile) formData.append('foto', fotoFile);
+
+  const btn = document.querySelector('#speaker-form .btn-accept');
+  btn.disabled = true;
+  btn.textContent = 'Salvando...';
+
+  try {
+    const res  = await fetch(`${API}/event-speakers`, { method: 'POST', body: formData });
+    const json = await res.json();
+    if (json.success) {
+      eventSpeakers.push(json.item);
+      renderEventSpeakers();
+      ['sp-nome','sp-cargo','sp-empresa','sp-tema','sp-bio','sp-linkedin'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('sp-foto').value = '';
+      toggleEventForm('speaker-form');
+      showToast('success', `Palestrante ${nome} adicionado!`);
+    }
+  } catch {
+    showToast('error', 'Erro ao salvar palestrante');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Salvar Palestrante`;
+  }
+}
+
+async function deleteEventSpeaker(id) {
+  showModal('Remover palestrante', 'Tem certeza que deseja remover este palestrante do evento?', false, async () => {
+    await fetch(`${API}/event-speakers/${id}`, { method: 'DELETE' });
+    eventSpeakers = eventSpeakers.filter(s => s.id !== id);
+    hideModal();
+    renderEventSpeakers();
+    showToast('success', 'Palestrante removido');
+  });
+}
+
+// ── Schedule ───────────────────────────────────────────────────────────────────
+function renderEventSchedule() {
+  const list    = document.getElementById('event-schedule-list');
+  const counter = document.getElementById('count-event-schedule');
+  if (!list) return;
+  if (counter) counter.textContent = eventSchedule.length;
+
+  if (eventSchedule.length === 0) {
+    list.innerHTML = `<div class="empty-state"><p>Nenhum item na programação ainda</p></div>`;
+    return;
+  }
+
+  list.innerHTML = eventSchedule.map(s => `
+    <div class="event-item-card" data-id="${s.id}">
+      <div class="event-schedule-badge">
+        ${s.data    ? `<span class="sched-date">${s.data}</span>` : ''}
+        ${s.horario ? `<span class="sched-time">${s.horario}</span>` : ''}
+        ${s.local   ? `<span class="sched-local">${s.local}</span>` : ''}
+      </div>
+      <div class="event-item-info">
+        <strong class="event-item-name">${s.titulo}</strong>
+        ${s.palestrante ? `<span class="event-item-sub">${s.palestrante}</span>` : ''}
+        ${s.duracao     ? `<span class="event-item-tag">${s.duracao}</span>` : ''}
+        ${s.descricao   ? `<p class="event-item-bio">${s.descricao}</p>` : ''}
+      </div>
+      <button class="btn btn-delete-mini" onclick="deleteEventSchedule(${s.id})" title="Excluir item">${trashSVG}</button>
+    </div>`).join('');
+}
+
+async function addEventSchedule() {
+  const titulo = document.getElementById('sc-titulo').value.trim();
+  if (!titulo) { showToast('error', 'Título é obrigatório'); return; }
+
+  const item = {
+    data:        document.getElementById('sc-data').value.trim(),
+    horario:     document.getElementById('sc-horario').value.trim(),
+    titulo,
+    palestrante: document.getElementById('sc-palestrante').value.trim(),
+    local:       document.getElementById('sc-local').value.trim(),
+    duracao:     document.getElementById('sc-duracao').value.trim(),
+    descricao:   document.getElementById('sc-descricao').value.trim(),
+  };
+
+  const btn = document.querySelector('#schedule-form .btn-accept');
+  btn.disabled = true;
+  btn.textContent = 'Salvando...';
+
+  try {
+    const res  = await fetch(`${API}/event-schedule`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(item)
+    });
+    const json = await res.json();
+    if (json.success) {
+      eventSchedule.push(json.item);
+      renderEventSchedule();
+      ['sc-data','sc-horario','sc-titulo','sc-palestrante','sc-local','sc-duracao','sc-descricao'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      toggleEventForm('schedule-form');
+      showToast('success', `"${titulo}" adicionado à programação!`);
+    }
+  } catch {
+    showToast('error', 'Erro ao salvar item da programação');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Salvar na Programação`;
+  }
+}
+
+async function deleteEventSchedule(id) {
+  showModal('Remover item', 'Tem certeza que deseja remover este item da programação?', false, async () => {
+    await fetch(`${API}/event-schedule/${id}`, { method: 'DELETE' });
+    eventSchedule = eventSchedule.filter(s => s.id !== id);
+    hideModal();
+    renderEventSchedule();
+    showToast('success', 'Item removido da programação');
+  });
 }
 
 // ── Modal ──────────────────────────────────────────────────────────────────────
