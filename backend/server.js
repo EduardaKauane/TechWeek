@@ -1,21 +1,22 @@
 const express = require('express');
 const cors    = require('cors');
-const fs      = require('fs');
 const path    = require('path');
+const fs      = require('fs');
 const multer  = require('multer');
+const { createClient } = require('@supabase/supabase-js');
 const { Resend } = require('resend');
 require('dotenv').config();
 
 const app    = express();
 const resend = new Resend(process.env.RESEND_API_KEY);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 app.use(cors());
 app.use(express.json());
 
-// ── Uploads ────────────────────────────────────────────────────────────────────
+// ── Uploads (fotos dos palestrantes) ──────────────────────────────────────────
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
-
 app.use('/uploads', express.static(UPLOADS_DIR));
 
 const storage = multer.diskStorage({
@@ -27,159 +28,155 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
-// ── Banco de dados JSON ────────────────────────────────────────────────────────
-const DB_PATH = path.join(__dirname, 'db.json');
-
-function readDB() {
-  if (!fs.existsSync(DB_PATH)) {
-    const empty = { participantes: [], palestrantes: [], coffeeBreak: [], projetos: [], eventSpeakers: [], eventSchedule: [] };
-    fs.writeFileSync(DB_PATH, JSON.stringify(empty, null, 2));
-    return empty;
-  }
-  const db = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-  if (!db.eventSpeakers) db.eventSpeakers = [];
-  if (!db.eventSchedule) db.eventSchedule = [];
-  return db;
-}
-
-function writeDB(data) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-}
+// ── Mapeamento de tipo → tabela Supabase ──────────────────────────────────────
+const tableMap = {
+  participantes: 'participantes',
+  palestrantes:  'palestrantes',
+  coffeeBreak:   'coffee_break',
+  projetos:      'projetos',
+};
 
 // ── GET /inscricoes ────────────────────────────────────────────────────────────
-app.get('/inscricoes', (req, res) => {
-  res.json(readDB());
+app.get('/inscricoes', async (req, res) => {
+  try {
+    const [p, pal, cb, proj] = await Promise.all([
+      supabase.from('participantes').select('*').order('id', { ascending: false }),
+      supabase.from('palestrantes').select('*').order('id',  { ascending: false }),
+      supabase.from('coffee_break').select('*').order('id',  { ascending: false }),
+      supabase.from('projetos').select('*').order('id',      { ascending: false }),
+    ]);
+    res.json({
+      participantes: p.data   || [],
+      palestrantes:  pal.data || [],
+      coffeeBreak:   cb.data  || [],
+      projetos:      proj.data|| [],
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // ── POST /inscricao ────────────────────────────────────────────────────────────
-app.post('/inscricao', (req, res) => {
+app.post('/inscricao', async (req, res) => {
   const { tipo, ...dados } = req.body;
-  const db = readDB();
-
-  if (!db[tipo]) {
-    return res.status(400).json({ success: false, error: 'Tipo inválido' });
-  }
+  const tabela = tableMap[tipo];
+  if (!tabela) return res.status(400).json({ success: false, error: 'Tipo inválido' });
 
   const id   = Date.now();
   const item = { id, status: 'pendente', ...dados };
-  db[tipo].push(item);
-  writeDB(db);
+
+  const { error } = await supabase.from(tabela).insert(item);
+  if (error) return res.status(500).json({ success: false, error: error.message });
 
   console.log(`✅ Nova inscrição [${tipo}] → ${item.nome}`);
   res.json({ success: true, id });
 });
 
 // ── PATCH /inscricao/:tipo/:id ─────────────────────────────────────────────────
-app.patch('/inscricao/:tipo/:id', (req, res) => {
-  const { tipo, id } = req.params;
-  const { status }   = req.body;
-  const db = readDB();
+app.patch('/inscricao/:tipo/:id', async (req, res) => {
+  const tabela = tableMap[req.params.tipo];
+  if (!tabela) return res.status(400).json({ success: false, error: 'Tipo inválido' });
 
-  if (!db[tipo]) return res.status(400).json({ success: false, error: 'Tipo inválido' });
+  const { error } = await supabase
+    .from(tabela)
+    .update({ status: req.body.status })
+    .eq('id', req.params.id);
 
-  const item = db[tipo].find(i => i.id == id);
-  if (!item) return res.status(404).json({ success: false, error: 'Não encontrado' });
-
-  item.status = status;
-  writeDB(db);
+  if (error) return res.status(500).json({ success: false, error: error.message });
   res.json({ success: true });
 });
 
 // ── DELETE /inscricao/:tipo/:id ────────────────────────────────────────────────
-app.delete('/inscricao/:tipo/:id', (req, res) => {
-  const { tipo, id } = req.params;
-  const db = readDB();
+app.delete('/inscricao/:tipo/:id', async (req, res) => {
+  const tabela = tableMap[req.params.tipo];
+  if (!tabela) return res.status(400).json({ success: false, error: 'Tipo inválido' });
 
-  if (!db[tipo]) return res.status(400).json({ success: false, error: 'Tipo inválido' });
-
-  db[tipo] = db[tipo].filter(i => i.id != id);
-  writeDB(db);
+  const { error } = await supabase.from(tabela).delete().eq('id', req.params.id);
+  if (error) return res.status(500).json({ success: false, error: error.message });
   res.json({ success: true });
 });
 
 // ── GET /event-speakers ────────────────────────────────────────────────────────
-app.get('/event-speakers', (req, res) => {
-  res.json(readDB().eventSpeakers);
+app.get('/event-speakers', async (req, res) => {
+  const { data, error } = await supabase.from('event_speakers').select('*').order('id');
+  if (error) return res.status(500).json({ success: false, error: error.message });
+  res.json(data || []);
 });
 
 // ── POST /event-speakers ───────────────────────────────────────────────────────
-app.post('/event-speakers', upload.single('foto'), (req, res) => {
-  const db = readDB();
+app.post('/event-speakers', upload.single('foto'), async (req, res) => {
   const { nome, cargo, empresa, bio, tema, linkedin } = req.body;
   const foto = req.file ? `/uploads/${req.file.filename}` : null;
   const item = { id: Date.now(), nome, cargo, empresa, bio, tema, linkedin, foto };
-  db.eventSpeakers.push(item);
-  writeDB(db);
+
+  const { error } = await supabase.from('event_speakers').insert(item);
+  if (error) return res.status(500).json({ success: false, error: error.message });
+
   console.log(`✅ Palestrante do evento adicionado → ${nome}`);
   res.json({ success: true, item });
 });
 
 // ── PATCH /event-speakers/:id ──────────────────────────────────────────────────
-app.patch('/event-speakers/:id', upload.single('foto'), (req, res) => {
-  const db   = readDB();
-  const item = db.eventSpeakers.find(s => s.id == req.params.id);
-  if (!item) return res.status(404).json({ success: false, error: 'Não encontrado' });
+app.patch('/event-speakers/:id', upload.single('foto'), async (req, res) => {
+  const updates = {};
+  ['nome','cargo','empresa','bio','tema','linkedin'].forEach(f => {
+    if (req.body[f] !== undefined) updates[f] = req.body[f];
+  });
+  if (req.file) updates.foto = `/uploads/${req.file.filename}`;
 
-  const fields = ['nome', 'cargo', 'empresa', 'bio', 'tema', 'linkedin'];
-  fields.forEach(f => { if (req.body[f] !== undefined) item[f] = req.body[f]; });
-  if (req.file) item.foto = `/uploads/${req.file.filename}`;
-  writeDB(db);
-  res.json({ success: true, item });
+  const { error } = await supabase.from('event_speakers').update(updates).eq('id', req.params.id);
+  if (error) return res.status(500).json({ success: false, error: error.message });
+  res.json({ success: true });
 });
 
 // ── DELETE /event-speakers/:id ─────────────────────────────────────────────────
-app.delete('/event-speakers/:id', (req, res) => {
-  const db   = readDB();
-  const item = db.eventSpeakers.find(s => s.id == req.params.id);
-  if (item?.foto) {
-    const filePath = path.join(__dirname, item.foto);
+app.delete('/event-speakers/:id', async (req, res) => {
+  const { data } = await supabase.from('event_speakers').select('foto').eq('id', req.params.id).single();
+  if (data?.foto) {
+    const filePath = path.join(__dirname, data.foto);
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
   }
-  db.eventSpeakers = db.eventSpeakers.filter(s => s.id != req.params.id);
-  writeDB(db);
+  const { error } = await supabase.from('event_speakers').delete().eq('id', req.params.id);
+  if (error) return res.status(500).json({ success: false, error: error.message });
   res.json({ success: true });
 });
 
 // ── GET /event-schedule ────────────────────────────────────────────────────────
-app.get('/event-schedule', (req, res) => {
-  res.json(readDB().eventSchedule);
+app.get('/event-schedule', async (req, res) => {
+  const { data, error } = await supabase.from('event_schedule').select('*').order('id');
+  if (error) return res.status(500).json({ success: false, error: error.message });
+  res.json(data || []);
 });
 
 // ── POST /event-schedule ───────────────────────────────────────────────────────
-app.post('/event-schedule', (req, res) => {
-  const db   = readDB();
+app.post('/event-schedule', async (req, res) => {
   const item = { id: Date.now(), ...req.body };
-  db.eventSchedule.push(item);
-  writeDB(db);
+  const { error } = await supabase.from('event_schedule').insert(item);
+  if (error) return res.status(500).json({ success: false, error: error.message });
+
   console.log(`✅ Programação adicionada → ${item.titulo}`);
   res.json({ success: true, item });
 });
 
 // ── PATCH /event-schedule/:id ──────────────────────────────────────────────────
-app.patch('/event-schedule/:id', (req, res) => {
-  const db   = readDB();
-  const item = db.eventSchedule.find(s => s.id == req.params.id);
-  if (!item) return res.status(404).json({ success: false, error: 'Não encontrado' });
-  Object.assign(item, req.body);
-  writeDB(db);
-  res.json({ success: true, item });
+app.patch('/event-schedule/:id', async (req, res) => {
+  const { error } = await supabase.from('event_schedule').update(req.body).eq('id', req.params.id);
+  if (error) return res.status(500).json({ success: false, error: error.message });
+  res.json({ success: true });
 });
 
 // ── DELETE /event-schedule/:id ─────────────────────────────────────────────────
-app.delete('/event-schedule/:id', (req, res) => {
-  const db = readDB();
-  db.eventSchedule = db.eventSchedule.filter(s => s.id != req.params.id);
-  writeDB(db);
+app.delete('/event-schedule/:id', async (req, res) => {
+  const { error } = await supabase.from('event_schedule').delete().eq('id', req.params.id);
+  if (error) return res.status(500).json({ success: false, error: error.message });
   res.json({ success: true });
 });
 
 // ── POST /send-email ───────────────────────────────────────────────────────────
 app.post('/send-email', async (req, res) => {
   const { nome, email, status, tipo } = req.body;
-
-  if (!nome || !email || !status || !tipo) {
+  if (!nome || !email || !status || !tipo)
     return res.status(400).json({ success: false, error: 'Campos obrigatórios faltando' });
-  }
 
   const isAprovado = status === 'aprovado';
   console.log(`\n📧 Enviando email → ${email} (${nome}, ${tipo}, ${status})`);
@@ -197,7 +194,7 @@ app.post('/send-email', async (req, res) => {
     <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px">
       <h2 style="color:#1e3a5f;margin-bottom:8px">Olá, ${nome}</h2>
       <p style="color:#374151;font-size:15px">Agradecemos o seu interesse em participar da <strong>Tech Week</strong> como <strong>${tipo}</strong>.</p>
-      <p style="color:#374151;font-size:15px">Infelizmente, após análise, sua inscrição <span style="color:#dc2626;font-weight:600">não foi selecionada</span> nesta edição. Esperamos contar com você em futuras oportunidades.</p>
+      <p style="color:#374151;font-size:15px">Infelizmente, após análise, sua inscrição <span style="color:#dc2626;font-weight:600">não foi selecionada</span> nesta edição.</p>
       <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
       <p style="color:#9ca3af;font-size:13px">Tech Week — Equipe Organizadora</p>
     </div>`;
@@ -206,32 +203,19 @@ app.post('/send-email', async (req, res) => {
     const { data, error } = await resend.emails.send({
       from:    process.env.FROM_EMAIL || 'Tech Week <onboarding@resend.dev>',
       to:      [process.env.TEST_EMAIL || email],
-      subject: isAprovado
-        ? '🎉 Parabéns! Sua inscrição foi aprovada - Tech Week'
-        : 'Resultado da sua inscrição - Tech Week',
-      html: isAprovado ? htmlAprovado : htmlReprovado,
+      subject: isAprovado ? '🎉 Sua inscrição foi aprovada - Tech Week' : 'Resultado da sua inscrição - Tech Week',
+      html:    isAprovado ? htmlAprovado : htmlReprovado,
     });
-
-    if (error) {
-      console.error('❌ Resend error:', error);
-      return res.status(500).json({ success: false, error: error.message });
-    }
-
+    if (error) return res.status(500).json({ success: false, error: error.message });
     console.log(`✅ Email enviado! ID: ${data.id}`);
     res.json({ success: true, id: data.id });
-
   } catch (err) {
-    console.error('❌ Erro interno:', err.message);
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
 // ── Health check ───────────────────────────────────────────────────────────────
-app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'Tech Week API' });
-});
+app.get('/', (req, res) => res.json({ status: 'ok', service: 'Tech Week API' }));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`\n🚀 Servidor rodando em http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`\n🚀 Servidor rodando em http://localhost:${PORT}`));
