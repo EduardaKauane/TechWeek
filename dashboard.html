@@ -238,8 +238,19 @@
             </div>
             <div class="event-field">
               <label>Foto do Palestrante</label>
-              <input id="sp-foto" type="file" accept="image/*" class="file-input">
-              <div id="sp-foto-preview" class="foto-preview hidden"></div>
+              <div class="foto-upload-row">
+                <div class="foto-circle-preview" id="sp-foto-circle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+                </div>
+                <div class="foto-upload-controls">
+                  <label for="sp-foto" class="btn-upload">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    Escolher foto
+                  </label>
+                  <input id="sp-foto" type="file" accept="image/*" style="display:none" onchange="previewFoto(this)">
+                  <span id="sp-foto-nome" class="foto-hint">Nenhum arquivo</span>
+                </div>
+              </div>
             </div>
             <div class="event-field full-width">
               <label>Bio</label>

@@ -472,8 +472,21 @@ function renderEventTab() {
 }
 
 function toggleEventForm(formId) {
-  const form = document.getElementById(formId);
-  form.classList.toggle('hidden');
+  document.getElementById(formId).classList.toggle('hidden');
+}
+
+function previewFoto(input) {
+  const circle = document.getElementById('sp-foto-circle');
+  const hint   = document.getElementById('sp-foto-nome');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      circle.innerHTML = `<img src="${e.target.result}" alt="preview">`;
+      circle.classList.add('has-photo');
+    };
+    reader.readAsDataURL(input.files[0]);
+    hint.textContent = input.files[0].name;
+  }
 }
 
 // ── Speakers ───────────────────────────────────────────────────────────────────
@@ -535,6 +548,10 @@ async function addEventSpeaker() {
         document.getElementById(id).value = '';
       });
       document.getElementById('sp-foto').value = '';
+      const circle = document.getElementById('sp-foto-circle');
+      circle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>`;
+      circle.classList.remove('has-photo');
+      document.getElementById('sp-foto-nome').textContent = 'Nenhum arquivo';
       toggleEventForm('speaker-form');
       showToast('success', `Palestrante ${nome} adicionado!`);
     }
