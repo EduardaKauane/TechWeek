@@ -189,6 +189,33 @@ img { max-width: 100%; }
 /* ============================================================
    HERO
    ============================================================ */
+.hero-bg-logos {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-logo {
+  position: absolute;
+  opacity: 0.07;
+  filter: drop-shadow(0 8px 24px rgba(30,58,138,0.18));
+  animation: floatLogo linear infinite;
+  transform-origin: center;
+  user-select: none;
+}
+[data-theme="dark"] .bg-logo {
+  opacity: 0.05;
+  filter: drop-shadow(0 8px 24px rgba(255,255,255,0.08));
+}
+@keyframes floatLogo {
+  0%   { transform: translateY(0px)   rotate(0deg)   scale(1);    }
+  25%  { transform: translateY(-18px) rotate(4deg)   scale(1.04); }
+  50%  { transform: translateY(-8px)  rotate(-3deg)  scale(0.97); }
+  75%  { transform: translateY(-22px) rotate(2deg)   scale(1.02); }
+  100% { transform: translateY(0px)   rotate(0deg)   scale(1);    }
+}
+
 .hero {
   min-height: 100vh;
   padding-top: var(--nav-h);
@@ -202,7 +229,7 @@ img { max-width: 100%; }
   padding-left: 24px;
   padding-right: 24px;
 }
-.hero-content { max-width: 700px; }
+.hero-content { max-width: 700px; position: relative; z-index: 1; }
 .hero-badge {
   display: inline-flex;
   align-items: center;
