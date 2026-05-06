@@ -1,37 +1,30 @@
-// ── Mock data ──────────────────────────────────────────────────────────────────
-const db = {
-  participantes: [
-    { id: 1, nome: 'Ana Clara Silva', email: 'ana.silva@email.com', telefone: '67999111111', status: 'pendente' },
-    { id: 2, nome: 'Carlos Eduardo Santos', email: 'carlos.santos@email.com', telefone: '67999222222', status: 'aceito' },
-    { id: 3, nome: 'Maria Fernanda Oliveira', email: 'maria.oliveira@email.com', telefone: '67999333333', status: 'negado' }
-  ],
-  palestrantes: [
-    {
-      id: 1,
-      nome: 'DIOGO DE OLIVEIRA TEIXEIRA',
-      email: 'diogoteixeira4000@gmail.com',
-      telefone: '67984390638',
-      tema: 'TI',
-      duracao: '50 minutos',
-      briefing: 'Muita coisa',
-      status: 'pendente'
-    }
-  ],
-  coffeeBreak: [
-    { id: 1, nome: 'João Pedro Lima', email: 'joao.lima@email.com', telefone: '67988444444', restricoes: 'Sem glúten', status: 'pendente' }
-  ],
-  projetos: [
-    {
-      id: 1,
-      nome: 'App de Gestão Escolar',
-      equipe: 'Grupo Alpha',
-      email: 'alpha@email.com',
-      tecnologias: 'React, Node.js, PostgreSQL',
-      descricao: 'Sistema web para gerenciar alunos, turmas e notas.',
-      status: 'pendente'
-    }
-  ]
-};
+// ── API ────────────────────────────────────────────────────────────────────────
+const API = 'http://localhost:3000';
+
+const db = { participantes: [], palestrantes: [], coffeeBreak: [], projetos: [] };
+
+async function loadData() {
+  try {
+    const res  = await fetch(`${API}/inscricoes`);
+    const data = await res.json();
+    Object.assign(db, data);
+  } catch {
+    showToast('error', 'Servidor offline. Verifique se o backend está rodando.');
+  }
+  render();
+}
+
+async function apiPatch(tipo, id, status) {
+  await fetch(`${API}/inscricao/${tipo}/${id}`, {
+    method:  'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ status }),
+  });
+}
+
+async function apiDelete(tipo, id) {
+  await fetch(`${API}/inscricao/${tipo}/${id}`, { method: 'DELETE' });
+}
 
 // ── Section config ─────────────────────────────────────────────────────────────
 const sections = [
@@ -302,7 +295,8 @@ function filterRel(items) {
   );
 }
 
-function deleteRelItem(sectionKey, id) {
+async function deleteRelItem(sectionKey, id) {
+  await apiDelete(sectionKey, id);
   db[sectionKey] = db[sectionKey].filter(i => i.id !== id);
   emailSentItems.delete(`${sectionKey}-${id}`);
   relState.expandedCards.delete(`${sectionKey}-${id}`);
@@ -479,7 +473,8 @@ function confirmAction(sectionKey, id, newStatus) {
     'Confirmar ação',
     `Tem certeza que deseja ${verb} a inscrição de ${item.nome}?`,
     false,
-    () => {
+    async () => {
+      await apiPatch(sectionKey, id, newStatus);
       item.status = newStatus;
       hideModal();
       const msg = newStatus === 'aceito'
@@ -500,12 +495,14 @@ function openChangeStatus(sectionKey, id) {
     'Alterar status',
     `Selecione o novo status para ${item.nome}:`,
     true,
-    () => {
+    async () => {
       const prev = item.status;
-      item.status = document.getElementById('modal-select').value;
+      const next = document.getElementById('modal-select').value;
+      await apiPatch(sectionKey, id, next);
+      item.status = next;
       hideModal();
       render();
-      if (item.status !== prev)
+      if (next !== prev)
         showToast('info', `Status de ${item.nome} alterado para ${statusLabels[item.status]}.`);
     }
   );
@@ -532,4 +529,4 @@ document.getElementById('search-relatorios').addEventListener('input', e => {
   renderRelatorios();
 });
 
-render();
+loadData();

@@ -1,185 +1,348 @@
-<!doctype html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>II Tech Week</title>
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>II Tech Week - Unicesumar</title>
 
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230066cc'/><text x='50' y='65' font-size='60' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial'>TW</text></svg>"
-      type="image/svg+xml"
-    />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%231e3a8a'/><text x='50' y='68' font-size='54' font-weight='800' fill='white' text-anchor='middle' font-family='Arial'>TW</text></svg>" type="image/svg+xml" />
 
-    <link rel="stylesheet" href="css/style.css" />
-    <script src="js/script.js" defer></script>
-  </head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <body>
+  <link rel="stylesheet" href="css/style.css" />
 
-    <!-- WESLEY - NAVBAR -->
-    <header>
-      <nav>
-        <h1>Tech Week</h1>
-        <ul>
-          <li><a href="#programacao">Programação</a></li>
-          <li><a href="#palestrantes">Palestrantes</a></li>
-          <li><a href="#localizacao">Localização</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="dashboard.html">Admin</a></li>
-        </ul>
-      </nav>
-    </header>
+  <script>
+    (function () {
+      const t = localStorage.getItem('tw-theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
 
-    <!-- WESLEY - HERO -->
-    <section id="programacao">
-      <h2>Programação do Evento</h2>
-      <p>Em breve...</p>
-    </section>
-    <main>
-      <section id="hero">
-        <p>📅 5 a 9 de Maio, 2026</p>
-        <h1>II Tech Week</h1>
-        <h2>Inteligência Artificial em Ação</h2>
-        <p>Dados, Inovação e Transformação Digital</p>
-        <p>Evento gratuito e aberto ao público.</p>
-        <div>
-          <button>Quero Participar</button>
-          <button>Sou Palestrante</button>
+  <!-- ══ NAVBAR ══════════════════════════════════════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">TW</div>
+        <div class="logo-text">
+          <span class="logo-title">Tech Week</span>
+          <span class="logo-sub">Unicesumar</span>
         </div>
-      </section>
-    </main>
+      </a>
 
-    <!-- Ricardo vai adicionar aqui -->
-    <section class="localizacao">
-      <h2>Localização</h2>
+      <nav class="nav-links">
+        <a href="#programacao">Programação</a>
+        <a href="#palestrantes">Palestrantes</a>
+        <a href="#localizacao">Localização</a>
+        <a href="#patrocinadores">Patrocinadores</a>
+        <a href="FAQ.html">FAQ</a>
+      </nav>
 
-      <div class="localizacao-conteudo">
-        <!-- INFORMAÇÕES DA LOCALIZAÇÃO-->
-        <div class="localizacao-descricao">
-          <div class="descricao-item">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-map-pin w-6 h-6 text-[#0055b8] dark:text-blue-400 flex-shrink-0 mt-1"
-            >
-              <path
-                d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
-              ></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-login">Login</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema">
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ HERO ════════════════════════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+        1 a 3 de Junho, 2026
+      </div>
+      <h1 class="hero-title">II Tech Week</h1>
+      <h2 class="hero-subtitle">Inteligência Artificial em Ação</h2>
+      <p class="hero-desc">Dados, Inovação e Transformação Digital</p>
+      <p class="hero-desc-2">Evento gratuito e aberto ao público.</p>
+      <div class="hero-actions">
+        <a href="participante.html" class="btn btn-primary-hero">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Quero Participar
+        </a>
+        <a href="palestrante.html" class="btn btn-outline-hero">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+          Sou Palestrante
+        </a>
+      </div>
+    </div>
+    <a href="#sobre" class="hero-scroll">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </a>
+  </section>
+
+  <!-- ══ SOBRE O TEMA ════════════════════════════════════════════════════════ -->
+  <section class="sobre-tema" id="sobre">
+    <div class="section-inner">
+      <h2 class="section-title-light">Sobre o Tema</h2>
+      <p class="sobre-desc">
+        A II Tech Week propõe uma abordagem prática e contemporânea sobre o uso da Inteligência
+        Artificial, destacando sua aplicação real em diferentes contextos organizacionais e sociais.
+        O tema enfatiza não apenas a compreensão teórica, mas principalmente a vivência e
+        experimentação das tecnologias que estão moldando o presente.
+      </p>
+      <div class="sobre-cards">
+        <div class="sobre-card fade-in">
+          <div class="sobre-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+          </div>
+          <h3>Dados</h3>
+          <p>Coletar, analisar e interpretar dados para decisões estratégicas</p>
+        </div>
+        <div class="sobre-card fade-in">
+          <div class="sobre-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+          </div>
+          <h3>Inovação</h3>
+          <p>Algoritmos inteligentes impulsionando soluções personalizadas</p>
+        </div>
+        <div class="sobre-card fade-in">
+          <div class="sobre-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
+          </div>
+          <h3>Transformação</h3>
+          <p>IA aplicada em saúde, educação, negócios e gestão pública</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PROGRAMAÇÃO ═════════════════════════════════════════════════════════ -->
+  <section class="page-section" id="programacao">
+    <div class="section-inner">
+      <div class="section-header-center">
+        <h2 class="section-title-dark">Programação</h2>
+      </div>
+      <div class="schedule-grid">
+        <div class="schedule-card fade-in">
+          <div class="schedule-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div>
+          <div class="schedule-info">
+            <span class="schedule-day">Segunda-feira &bull; 19:00 - 21:00</span>
+            <h3>Machine Learning na Prática</h3>
+            <p class="schedule-speaker">Dra. Ana Silva</p>
+            <p class="schedule-desc">Explorando aplicações reais de ML em diferentes setores</p>
+          </div>
+        </div>
+        <div class="schedule-card fade-in">
+          <div class="schedule-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div>
+          <div class="schedule-info">
+            <span class="schedule-day">Terça-feira &bull; 19:00 - 21:00</span>
+            <h3>Deep Learning e Visão Computacional</h3>
+            <p class="schedule-speaker">Prof. Carlos Mendes</p>
+            <p class="schedule-desc">Como a IA está revolucionando o processamento de imagens</p>
+          </div>
+        </div>
+        <div class="schedule-card fade-in">
+          <div class="schedule-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div>
+          <div class="schedule-info">
+            <span class="schedule-day">Quarta-feira &bull; 19:00 - 21:00</span>
+            <h3>IA na Saúde Digital</h3>
+            <p class="schedule-speaker">Dra. Beatriz Costa</p>
+            <p class="schedule-desc">Transformação digital nos cuidados médicos com IA</p>
+          </div>
+        </div>
+        <div class="schedule-card fade-in">
+          <div class="schedule-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div>
+          <div class="schedule-info">
+            <span class="schedule-day">Quinta-feira &bull; 19:00 - 21:00</span>
+            <h3>Ética e Inteligência Artificial</h3>
+            <p class="schedule-speaker">Prof. Roberto Alves</p>
+            <p class="schedule-desc">Desafios éticos no desenvolvimento de sistemas inteligentes</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="projetos-destaque fade-in">
+        <h3>Apresentação de Projetos</h3>
+        <p class="projetos-sub">Quarta-feira será dedicada à apresentação de trabalhos e projetos dos alunos</p>
+        <p class="projetos-cta">Inscreva-se como participante e marque a opção de apresentar seu projeto!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PALESTRANTES ════════════════════════════════════════════════════════ -->
+  <section class="page-section bg-alt" id="palestrantes">
+    <div class="section-inner">
+      <div class="section-header-center">
+        <h2 class="section-title-dark">Palestrantes</h2>
+        <p class="section-sub">Profissionais renomados compartilhando conhecimento e experiência</p>
+      </div>
+      <div class="speakers-grid">
+        <div class="speaker-card fade-in">
+          <div class="speaker-avatar-img"><img src="src/leon.png" alt="Dra. Ana Silva"></div>
+          <h3>Dra. Ana Silva</h3>
+          <p>Machine Learning na Prática</p>
+        </div>
+        <div class="speaker-card fade-in">
+          <div class="speaker-avatar-img"><img src="src/leon.png" alt="Prof. Carlos Mendes"></div>
+          <h3>Prof. Carlos Mendes</h3>
+          <p>Deep Learning e Visão Computacional</p>
+        </div>
+        <div class="speaker-card fade-in">
+          <div class="speaker-avatar-img"><img src="src/leon.png" alt="Dra. Beatriz Costa"></div>
+          <h3>Dra. Beatriz Costa</h3>
+          <p>IA na Saúde Digital</p>
+        </div>
+        <div class="speaker-card fade-in">
+          <div class="speaker-avatar-img"><img src="src/leon.png" alt="Prof. Roberto Alves"></div>
+          <h3>Prof. Roberto Alves</h3>
+          <p>Ética e Inteligência Artificial</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LOCALIZAÇÃO ═════════════════════════════════════════════════════════ -->
+  <section class="page-section" id="localizacao">
+    <div class="section-inner">
+      <div class="section-header-center">
+        <h2 class="section-title-dark">Localização</h2>
+      </div>
+      <div class="localizacao-grid">
+        <div class="localizacao-info fade-in">
+          <div class="info-item">
+            <div class="info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
             <div>
-              <h3>Endereço</h3>
-              <p>
-                Campus Unicesumar Londrina<br />
-                Av. Santa Mônica, 450<br />
-                Londrina - PR
-              </p>
+              <h4>Endereço</h4>
+              <p>Campus Unicesumar Londrina<br>Av. Santa Mônica, 450<br>Londrina - PR</p>
             </div>
           </div>
-
-          <div class="descricao-item">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-phone w-6 h-6 text-[#0055b8] dark:text-blue-400 flex-shrink-0 mt-1"
-            >
-              <path
-                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-              ></path>
-            </svg>
+          <div class="info-item">
+            <div class="info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
             <div>
-              <h3>Telefone</h3>
+              <h4>Telefone</h4>
               <p>(43) 3375-7400</p>
             </div>
           </div>
-
-          <div class="descricao-item">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-mail w-6 h-6 text-[#0055b8] dark:text-blue-400 flex-shrink-0 mt-1"
-            >
-              <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-            </svg>
+          <div class="info-item">
+            <div class="info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
             <div>
-              <h3>Email</h3>
+              <h4>Email</h4>
               <p>techweek@unicesumar.edu.br</p>
             </div>
           </div>
         </div>
-
-        <!-- MAPA -->
-        <div class="localizacao-mapa">
+        <div class="localizacao-mapa fade-in">
           <iframe
-            src="https://www.google.com/maps?q=Unicesumar+Londrina&output=embed"
+            src="https://maps.google.com/maps?cid=7622865775436645789&output=embed&hl=pt-BR"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-          >
-          </iframe>
+            title="Localização Unicesumar Londrina"
+          ></iframe>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- PATROCINADORES -->
-    <section class="conteiner-patrocinadores">
-      <h2>Patrocinadores</h2>
-      <div class="grid-patrocinio">
-        <div class="bloco-patrocinio">
-          <p class="conteudo-patrocinio">Microsoft</p>
-        </div>
-        <div class="bloco-patrocinio">
-          <p class="conteudo-patrocinio">Google Cloud</p>
-        </div>
-        <div class="bloco-patrocinio">
-          <p class="conteudo-patrocinio">AWS</p>
-        </div>
-        <div class="bloco-patrocinio">
-          <p class="conteudo-patrocinio">IBM</p>
-        </div>
-        <div class="bloco-patrocinio">
-          <p class="conteudo-patrocinio">Oracle</p>
-        </div>
-        <div class="bloco-patrocinio">
-          <p class="conteudo-patrocinio">NVIDIA</p>
-        </div>
+  <!-- ══ PATROCINADORES ══════════════════════════════════════════════════════ -->
+  <section class="page-section bg-alt" id="patrocinadores">
+    <div class="section-inner">
+      <div class="section-header-center">
+        <h2 class="section-title-dark">Patrocinadores</h2>
       </div>
-    </section>
+      <div class="sponsors-grid">
+        <div class="sponsor-card fade-in"><span>Microsoft</span></div>
+        <div class="sponsor-card fade-in"><span>Google Cloud</span></div>
+        <div class="sponsor-card fade-in"><span>AWS</span></div>
+        <div class="sponsor-card fade-in"><span>IBM</span></div>
+        <div class="sponsor-card fade-in"><span>Oracle</span></div>
+        <div class="sponsor-card fade-in"><span>NVIDIA</span></div>
+      </div>
+    </div>
+  </section>
 
-    <!-- RODAPÉ DA PÁGINA -->
-    <footer class="footer">
-      <div class="footer-conteudo">
-        <h3>II Tech Week - Unicesumar</h3>
-        <p class="footer-subtitulo">
-          Inteligência Artificial em Ação: Dados, Inovação e Transformação
-          Digital
-        </p>
-        <p class="footer-copy">
-          © 2025 Unicesumar. Todos os direitos reservados.
-        </p>
+  <!-- ══ FAQ ════════════════════════════════════════════════════════════════ -->
+  <section class="page-section" id="faq">
+    <div class="section-inner">
+      <div class="section-header-center">
+        <h2 class="section-title-dark">Perguntas Frequentes</h2>
+        <p class="section-sub">Tire suas dúvidas sobre a Tech Week</p>
       </div>
-    </footer>
-  </body>
+      <div class="faq-lista">
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq1">Onde será o evento?</button><div id="faq1" class="faq-respostas" hidden>Campus Unicesumar Londrina - Av. Santa Mônica</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq2">Quando acontece a Tech Week?</button><div id="faq2" class="faq-respostas" hidden>De 1 a 3 de Junho de 2026</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq3">Preciso pagar para participar?</button><div id="faq3" class="faq-respostas" hidden>Não, o evento é gratuito.</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq4">Vou receber certificado?</button><div id="faq4" class="faq-respostas" hidden>Sim, mediante presença confirmada.</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq5">Haverá coffee break?</button><div id="faq5" class="faq-respostas" hidden>Sim, para participantes inscritos.</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq6">Posso apresentar meu projeto?</button><div id="faq6" class="faq-respostas" hidden>Sim! Marque a opção no formulário de inscrição.</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq7">Como funciona a confirmação de presença?</button><div id="faq7" class="faq-respostas" hidden>Será feita via QR Code ao final do evento.</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq8">Quem pode se inscrever como palestrante?</button><div id="faq8" class="faq-respostas" hidden>Alunos e profissionais com temas relevantes.</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq9">Qual a duração das palestras?</button><div id="faq9" class="faq-respostas" hidden>Entre 40 e 60 minutos.</div></div>
+        <div class="faq-item fade-in"><button class="faq-perguntas" aria-expanded="false" aria-controls="faq10">Como entro em contato com a organização?</button><div id="faq10" class="faq-respostas" hidden>techweek@unicesumar.edu.br</div></div>
+      </div>
+      <div class="faq-contato">
+        <p>Não encontrou a resposta que procurava?</p>
+        <p>Entre em contato: <a href="mailto:techweek@unicesumar.edu.br">techweek@unicesumar.edu.br</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <div class="logo-icon">TW</div>
+        <div class="logo-text">
+          <span class="logo-title">Tech Week</span>
+          <span class="logo-sub" style="color:rgba(255,255,255,0.6)">Unicesumar</span>
+        </div>
+      </div>
+      <h3>II Tech Week - Unicesumar</h3>
+      <p class="footer-sub">Inteligência Artificial em Ação: Dados, Inovação e Transformação Digital</p>
+      <p class="footer-copy">© 2026 Unicesumar. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- VLibras -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+
+  <script src="js/script.js"></script>
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      const next = isDark ? '' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('tw-theme', next);
+      document.getElementById('icon-moon').style.display = isDark ? 'block' : 'none';
+      document.getElementById('icon-sun').style.display  = isDark ? 'none'  : 'block';
+    }
+
+    // Init icon state
+    (function() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.getElementById('icon-moon').style.display = isDark ? 'none'  : 'block';
+      document.getElementById('icon-sun').style.display  = isDark ? 'block' : 'none';
+    })();
+
+    // Navbar scroll shadow
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
 </html>

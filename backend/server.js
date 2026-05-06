@@ -1,5 +1,7 @@
 const express = require('express');
 const cors    = require('cors');
+const fs      = require('fs');
+const path    = require('path');
 const { Resend } = require('resend');
 require('dotenv').config();
 
@@ -8,6 +10,73 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 app.use(cors());
 app.use(express.json());
+
+// ── Banco de dados JSON ────────────────────────────────────────────────────────
+const DB_PATH = path.join(__dirname, 'db.json');
+
+function readDB() {
+  if (!fs.existsSync(DB_PATH)) {
+    const empty = { participantes: [], palestrantes: [], coffeeBreak: [], projetos: [] };
+    fs.writeFileSync(DB_PATH, JSON.stringify(empty, null, 2));
+    return empty;
+  }
+  return JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
+}
+
+function writeDB(data) {
+  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+}
+
+// ── GET /inscricoes ────────────────────────────────────────────────────────────
+app.get('/inscricoes', (req, res) => {
+  res.json(readDB());
+});
+
+// ── POST /inscricao ────────────────────────────────────────────────────────────
+app.post('/inscricao', (req, res) => {
+  const { tipo, ...dados } = req.body;
+  const db = readDB();
+
+  if (!db[tipo]) {
+    return res.status(400).json({ success: false, error: 'Tipo inválido' });
+  }
+
+  const id   = Date.now();
+  const item = { id, status: 'pendente', ...dados };
+  db[tipo].push(item);
+  writeDB(db);
+
+  console.log(`✅ Nova inscrição [${tipo}] → ${item.nome}`);
+  res.json({ success: true, id });
+});
+
+// ── PATCH /inscricao/:tipo/:id ─────────────────────────────────────────────────
+app.patch('/inscricao/:tipo/:id', (req, res) => {
+  const { tipo, id } = req.params;
+  const { status }   = req.body;
+  const db = readDB();
+
+  if (!db[tipo]) return res.status(400).json({ success: false, error: 'Tipo inválido' });
+
+  const item = db[tipo].find(i => i.id == id);
+  if (!item) return res.status(404).json({ success: false, error: 'Não encontrado' });
+
+  item.status = status;
+  writeDB(db);
+  res.json({ success: true });
+});
+
+// ── DELETE /inscricao/:tipo/:id ────────────────────────────────────────────────
+app.delete('/inscricao/:tipo/:id', (req, res) => {
+  const { tipo, id } = req.params;
+  const db = readDB();
+
+  if (!db[tipo]) return res.status(400).json({ success: false, error: 'Tipo inválido' });
+
+  db[tipo] = db[tipo].filter(i => i.id != id);
+  writeDB(db);
+  res.json({ success: true });
+});
 
 // ── POST /send-email ───────────────────────────────────────────────────────────
 app.post('/send-email', async (req, res) => {
@@ -18,7 +87,6 @@ app.post('/send-email', async (req, res) => {
   }
 
   const isAprovado = status === 'aprovado';
-
   console.log(`\n📧 Enviando email → ${email} (${nome}, ${tipo}, ${status})`);
 
   const htmlAprovado = `
@@ -54,7 +122,7 @@ app.post('/send-email', async (req, res) => {
       return res.status(500).json({ success: false, error: error.message });
     }
 
-    console.log(`✅ Email enviado com sucesso! ID: ${data.id}`);
+    console.log(`✅ Email enviado! ID: ${data.id}`);
     res.json({ success: true, id: data.id });
 
   } catch (err) {
@@ -65,7 +133,7 @@ app.post('/send-email', async (req, res) => {
 
 // ── Health check ───────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'Tech Week Email API' });
+  res.json({ status: 'ok', service: 'Tech Week API' });
 });
 
 const PORT = process.env.PORT || 3000;

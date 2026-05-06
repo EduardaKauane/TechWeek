@@ -1,58 +1,90 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme="">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/style.css">
-<script src="js/script.js" defer></script>
-<title>Palestrante</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrição de Palestrante — Tech Week</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%231e3a8a'/><text x='50' y='68' font-size='54' font-weight='800' fill='white' text-anchor='middle' font-family='Arial'>TW</text></svg>" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function () { const t = localStorage.getItem('tw-theme'); if (t) document.documentElement.setAttribute('data-theme', t); })();
+  </script>
 </head>
 <body>
-
-<div class="form-container">
+  <div class="form-container">
+    <a href="index.html" class="form-back">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Voltar
+    </a>
     <h2>Inscrição de Palestrante</h2>
     <p>Envie sua proposta de palestra</p>
 
-    <input type="text" placeholder="Nome completo" class="campo-obrigatorio">
-    <input type="text" placeholder="DDD + Telefone" class="campo-obrigatorio campo-telefone">
-    <input type="email" placeholder="Email" class="campo-obrigatorio campo-email">
-    <input type="text" placeholder="Tema da palestra" class="campo-obrigatorio">
-    
-
-    <textarea placeholder="Descreva sua palestra" class="campo-obrigatorio"></textarea>
+    <input id="pal-nome"     type="text"  placeholder="Nome completo"    class="campo-obrigatorio">
+    <input id="pal-telefone" type="text"  placeholder="DDD + Telefone"   class="campo-obrigatorio campo-telefone">
+    <input id="pal-email"    type="email" placeholder="Email"            class="campo-obrigatorio campo-email">
+    <input id="pal-tema"     type="text"  placeholder="Tema da palestra" class="campo-obrigatorio">
+    <textarea id="pal-briefing" placeholder="Descreva sua palestra" class="campo-obrigatorio"></textarea>
 
     <label class="check-item">
-    <input type="checkbox">
-    <span>Possuo experiência como palestrante</span>
+      <input type="checkbox" id="pal-exp">
+      <span>Possuo experiência como palestrante</span>
     </label>
-
     <label class="check-item">
-    <input type="checkbox">
-    <span>Preciso de equipamentos (projetor, som, etc)</span>
+      <input type="checkbox" id="pal-equip">
+      <span>Preciso de equipamentos (projetor, som, etc)</span>
     </label>
 
-    <!-- 🔵 SLIDER NO LUGAR QUE VOCÊ QUER -->
-    <label for="tempoRange">Tempo Necessário (minutos) *</label>
+    <label class="range-label" for="tempoRange">Tempo necessário: <span id="tempoValor">40 minutos</span></label>
+    <input type="range" min="40" max="60" step="5" value="40" id="tempoRange">
+    <p class="range-hint">As palestras devem ter entre 40 e 60 minutos</p>
 
-    <input 
-        type="range" 
-        min="40" 
-        max="60" 
-        step="5" 
-        value="40" 
-        id="tempoRange"
-    />
+    <div id="form-erro" class="erro-msg" style="display:none"></div>
 
-    <p id="tempoValor">40 minutos</p>
+    <button class="btn-submit" onclick="enviarPalestrante()">Enviar proposta</button>
+  </div>
 
-    <p>As palestras devem ter entre 40 e 60 minutos</p>
+  <script src="js/script.js"></script>
+  <script>
+    const API = 'http://localhost:3000';
 
-    <!-- 🔘 BOTÃO LOGO ABAIXO -->
-    <button onclick="finalizar()">Enviar proposta</button>
-    <button class="btn-voltar-icon" onclick="voltarPagina()">
-    ← voltar
-    </button>
-</div>
+    async function enviarPalestrante() {
+      const nome     = document.getElementById('pal-nome').value.trim();
+      const telefone = document.getElementById('pal-telefone').value.trim();
+      const email    = document.getElementById('pal-email').value.trim();
+      const tema     = document.getElementById('pal-tema').value.trim();
+      const briefing = document.getElementById('pal-briefing').value.trim();
+      const duracao  = document.getElementById('tempoValor').textContent;
+      const erroEl   = document.getElementById('form-erro');
 
+      if (!nome || !telefone || !email || !tema || !briefing) {
+        erroEl.textContent = '❗ Preencha todos os campos obrigatórios.';
+        erroEl.style.display = 'block';
+        return;
+      }
+      erroEl.style.display = 'none';
+
+      const btn = document.querySelector('.btn-submit');
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+
+      try {
+        await fetch(`${API}/inscricao`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tipo: 'palestrantes', nome, telefone, email, tema, briefing, duracao }),
+        });
+
+        window.location.href = 'sucesso.html';
+      } catch {
+        erroEl.textContent = '❗ Erro ao conectar com o servidor. Verifique se o backend está rodando.';
+        erroEl.style.display = 'block';
+        btn.textContent = 'Enviar proposta';
+        btn.disabled = false;
+      }
+    }
+  </script>
 </body>
 </html>
