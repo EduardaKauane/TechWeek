@@ -606,9 +606,13 @@ async function addEventSchedule() {
   const titulo = document.getElementById('sc-titulo').value.trim();
   if (!titulo) { showToast('error', 'Título é obrigatório'); return; }
 
+  const dataRaw   = document.getElementById('sc-data').value;
+  const horarioRaw = document.getElementById('sc-horario').value;
+  const dataFmt = dataRaw ? new Date(dataRaw + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit' }) : '';
+
   const item = {
-    data:        document.getElementById('sc-data').value.trim(),
-    horario:     document.getElementById('sc-horario').value.trim(),
+    data:        dataFmt,
+    horario:     horarioRaw,
     titulo,
     palestrante: document.getElementById('sc-palestrante').value.trim(),
     local:       document.getElementById('sc-local').value.trim(),

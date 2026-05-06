@@ -828,6 +828,8 @@ body {
 
 #tab-relatorios.hidden { display: none; }
 #tab-dashboard.hidden  { display: none; }
+#tab-evento.hidden     { display: none; }
+.hidden                { display: none !important; }
 
 @keyframes tabFadeIn {
   from { opacity: 0; transform: translateY(7px); }
@@ -1222,6 +1224,11 @@ body {
   box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
 }
 .event-field textarea { min-height: 80px; resize: vertical; }
+.event-field input[type="date"],
+.event-field input[type="time"] {
+  cursor: pointer;
+  color-scheme: light dark;
+}
 
 /* foto upload */
 .foto-upload-row {
