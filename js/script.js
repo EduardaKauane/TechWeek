@@ -90,13 +90,14 @@ camposObrigatorios.forEach(campo => {
         });
     }
 
-    // ===== VALIDAÇÃO EM TEMPO REAL DO EMAIL (ADICIONADO) =====
+    // ===== VALIDAÇÃO EM TEMPO REAL DO EMAIL =====
     const campoEmailLive = document.querySelector(".campo-email");
 
     if (campoEmailLive) {
 
         campoEmailLive.addEventListener("input", () => {
-            const email = campoEmailLive.value.toLowerCase();
+            const email = campoEmailLive.value.trim();
+            const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
             let msg = document.querySelector(".email-msg");
 
@@ -106,14 +107,13 @@ camposObrigatorios.forEach(campo => {
                 campoEmailLive.parentNode.appendChild(msg);
             }
 
-            if (
-                email.includes("@") &&
-                (email.endsWith("@gmail.com") || email.endsWith("@hotmail.com"))
-            ) {
+            if (email.length === 0) {
+                msg.textContent = "";
+            } else if (emailValido) {
                 msg.textContent = "✔ Email válido";
                 msg.style.color = "green";
             } else {
-                msg.textContent = "❗ Use @gmail.com ou @hotmail.com";
+                msg.textContent = "❗ Email inválido";
                 msg.style.color = "red";
             }
         });
@@ -211,25 +211,12 @@ function finalizar() {
     const campoEmail = document.querySelector("input[type='email']");
 
     if (campoEmail) {
-        const email = campoEmail.value.trim().toLowerCase();
+        const email = campoEmail.value.trim();
+        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-        if (
-            !email.includes("@") ||
-            !(email.endsWith("@gmail.com") || email.endsWith("@hotmail.com"))
-        ) {
+        if (!emailValido) {
             campoEmail.style.border = "1px solid red";
             vazio = true;
-
-            let msgErro = document.querySelector(".erro-msg");
-
-            if (!msgErro) {
-                msgErro = document.createElement("div");
-                msgErro.className = "erro-msg";
-                msgErro.textContent = "❗ Email inválido";
-
-                const form = document.querySelector(".form-container");
-                if (form) form.prepend(msgErro);
-            }
         }
     }
 
