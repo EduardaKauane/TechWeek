@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Exibe toast pendente após redirecionamento de formulário
+    const pendingToast = sessionStorage.getItem('tw-toast');
+    if (pendingToast) {
+        sessionStorage.removeItem('tw-toast');
+        try {
+            const { type, message } = JSON.parse(pendingToast);
+            showToast(type, message, false);
+        } catch (_) {}
+    }
+
     // SLIDER (só funciona se existir)
     const range = document.getElementById("tempoRange");
     const valor = document.getElementById("tempoValor");
