@@ -682,13 +682,11 @@ img { max-width: 100%; }
   color: var(--text-2);
 }
 .sponsor-card img {
-  max-width: 130px;
-  max-height: 64px;
+  width: 120px;
+  height: 80px;
   object-fit: contain;
-  margin-bottom: 12px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 12px;
 }
 
 /* ============================================================
