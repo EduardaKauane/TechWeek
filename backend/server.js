@@ -8,7 +8,7 @@ const { Resend } = require('resend');
 require('dotenv').config();
 
 const app    = express();
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 app.use(cors());
@@ -199,6 +199,8 @@ app.post('/send-email', async (req, res) => {
       <p style="color:#9ca3af;font-size:13px">Tech Week — Equipe Organizadora</p>
     </div>`;
 
+  if (!resend) return res.status(503).json({ success: false, error: 'Serviço de email não configurado' });
+
   try {
     const { data, error } = await resend.emails.send({
       from:    process.env.FROM_EMAIL || 'Tech Week <onboarding@resend.dev>',
@@ -212,6 +214,23 @@ app.post('/send-email', async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
+});
+
+// ── GET /event-config ──────────────────────────────────────────────────────────
+app.get('/event-config', async (req, res) => {
+  const { data, error } = await supabase.from('event_config').select('*').eq('id', 1).single();
+  if (error) return res.status(500).json({ success: false, error: error.message });
+  res.json(data || {});
+});
+
+// ── PATCH /event-config ────────────────────────────────────────────────────────
+app.patch('/event-config', async (req, res) => {
+  const { data_inicio, data_fim } = req.body;
+  const { error } = await supabase
+    .from('event_config')
+    .upsert({ id: 1, data_inicio, data_fim });
+  if (error) return res.status(500).json({ success: false, error: error.message });
+  res.json({ success: true });
 });
 
 // ── Health check ───────────────────────────────────────────────────────────────

@@ -29,10 +29,6 @@
         </div>
         <h1>II Tech Week</h1>
         <p>Inteligência Artificial em Ação</p>
-        <div class="brand-badges">
-          <span>📅 5 a 9 de Maio, 2026</span>
-          <span>📍 Unicesumar Londrina</span>
-        </div>
       </div>
     </div>
 
@@ -71,6 +67,7 @@
                 <input type="password" placeholder="••••••••" required id="login-senha" />
               </div>
             </div>
+            <div id="login-erro" style="display:none;color:#dc2626;font-size:13px;margin-bottom:8px;padding:10px 12px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px"></div>
             <button type="submit" class="btn-submit-login">
               Entrar
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -128,13 +125,24 @@
 
     function handleLogin(e) {
       e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const btn = e.target.querySelector('button[type="submit"]');
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const senha = document.getElementById('login-senha').value;
+      const btn   = e.target.querySelector('button[type="submit"]');
+
+      const ADMIN_EMAIL = 'cristiane.mashuda@unicesumar.edu.br';
+      const ADMIN_SENHA = 'C24646';
+
+      if (email !== ADMIN_EMAIL || senha !== ADMIN_SENHA) {
+        const errEl = document.getElementById('login-erro');
+        errEl.textContent = 'Email ou senha incorretos.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      document.getElementById('login-erro').style.display = 'none';
       btn.textContent = 'Entrando...';
       btn.disabled = true;
-      setTimeout(() => {
-        window.location.href = 'dashboard.html';
-      }, 800);
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
     }
   </script>
 

@@ -198,15 +198,15 @@ img { max-width: 100%; }
 }
 .bg-logo {
   position: absolute;
-  opacity: 0.07;
-  filter: drop-shadow(0 8px 24px rgba(30,58,138,0.18));
+  opacity: 0.09;
+  filter: brightness(0) drop-shadow(0 8px 24px rgba(30,58,138,0.12));
   animation: floatLogo linear infinite;
   transform-origin: center;
   user-select: none;
 }
 [data-theme="dark"] .bg-logo {
-  opacity: 0.05;
-  filter: drop-shadow(0 8px 24px rgba(255,255,255,0.08));
+  opacity: 0.07;
+  filter: brightness(100) drop-shadow(0 8px 24px rgba(255,255,255,0.1));
 }
 @keyframes floatLogo {
   0%   { transform: translateY(0px)   rotate(0deg)   scale(1);    }
@@ -268,8 +268,80 @@ img { max-width: 100%; }
 .hero-desc-2 {
   font-size: 15px;
   color: var(--text-muted);
-  margin-bottom: 36px;
+  margin-bottom: 28px;
 }
+
+/* ── Countdown ── */
+.hero-countdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 36px;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 420px;
+}
+.countdown-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(30,58,138,0.07);
+  border: 1.5px solid rgba(30,58,138,0.14);
+  border-radius: 14px;
+  padding: 14px 0;
+  flex: 1;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.countdown-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30,58,138,0.12);
+}
+[data-theme="dark"] .countdown-block {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.1);
+}
+.countdown-num {
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+  transition: transform 0.15s;
+}
+[data-theme="dark"] .countdown-num { color: var(--primary-light); }
+.countdown-num.flip {
+  animation: numFlip 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes numFlip {
+  0%   { transform: scaleY(0.4); opacity: 0.3; }
+  100% { transform: scaleY(1);   opacity: 1; }
+}
+.countdown-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+.countdown-sep {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  user-select: none;
+}
+.countdown-ended {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  background: rgba(30,58,138,0.08);
+  border: 1.5px solid rgba(30,58,138,0.15);
+  border-radius: 14px;
+  padding: 14px 24px;
+}
+[data-theme="dark"] .countdown-ended { color: var(--primary-light); }
 .hero-actions {
   display: flex;
   gap: 12px;
@@ -586,9 +658,13 @@ img { max-width: 100%; }
    PATROCINADORES
    ============================================================ */
 .sponsors-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
+}
+.sponsors-grid .sponsor-card {
+  width: 260px;
 }
 .sponsor-card {
   background: var(--surface);
@@ -604,6 +680,15 @@ img { max-width: 100%; }
   font-size: 16px;
   font-weight: 600;
   color: var(--text-2);
+}
+.sponsor-card img {
+  max-width: 130px;
+  max-height: 64px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ============================================================
@@ -958,10 +1043,19 @@ img { max-width: 100%; }
   .nav-links        { display: none; }
   .hero-title       { letter-spacing: -1px; }
   .form-container   { margin: calc(var(--nav-h) + 20px) 16px 40px; padding: 28px 20px; }
+  .hero-countdown   { max-width: 100%; gap: 6px; }
+  .countdown-num    { font-size: 28px; }
+  .countdown-sep    { font-size: 22px; margin-bottom: 14px; }
+  .countdown-block  { padding: 10px 0; border-radius: 10px; }
 }
 @media (max-width: 480px) {
   .speakers-grid { grid-template-columns: 1fr 1fr; }
   .sponsors-grid { grid-template-columns: 1fr 1fr; }
   .hero-actions  { flex-direction: column; align-items: center; }
   .btn           { width: 100%; justify-content: center; }
+  .hero-countdown  { gap: 4px; }
+  .countdown-num   { font-size: 24px; letter-spacing: 0; }
+  .countdown-sep   { font-size: 18px; margin-bottom: 12px; }
+  .countdown-label { font-size: 9px; letter-spacing: 0.06em; }
+  .countdown-block { padding: 8px 0; border-radius: 8px; }
 }

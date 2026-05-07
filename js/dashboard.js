@@ -464,6 +464,35 @@ async function loadEventData() {
     eventSchedule = await schRes.json();
     renderEventTab();
   } catch { /* silently fail */ }
+  loadEventConfig();
+}
+
+async function loadEventConfig() {
+  try {
+    const res = await fetch(`${API}/event-config`);
+    const cfg = await res.json();
+    if (cfg.data_inicio) document.getElementById('cfg-inicio').value = cfg.data_inicio;
+    if (cfg.data_fim)    document.getElementById('cfg-fim').value    = cfg.data_fim;
+  } catch { /* silently fail */ }
+}
+
+async function saveEventConfig() {
+  const inicio = document.getElementById('cfg-inicio').value;
+  const fim    = document.getElementById('cfg-fim').value;
+  if (!inicio || !fim) { showToast('error', 'Selecione as duas datas'); return; }
+
+  try {
+    const res  = await fetch(`${API}/event-config`, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ data_inicio: inicio, data_fim: fim }),
+    });
+    const json = await res.json();
+    if (json.success) showToast('success', 'Datas do evento atualizadas!');
+    else showToast('error', 'Erro ao salvar as datas');
+  } catch {
+    showToast('error', 'Erro ao conectar com o servidor');
+  }
 }
 
 function renderEventTab() {
