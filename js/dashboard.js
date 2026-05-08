@@ -1,5 +1,5 @@
 // ── API ────────────────────────────────────────────────────────────────────────
-const API = 'http://localhost:3000';
+const API = 'https://techweek-production-fedb.up.railway.app';
 
 const db = { participantes: [], palestrantes: [], coffeeBreak: [], projetos: [] };
 
@@ -226,7 +226,7 @@ async function sendEmail(sectionKey, id, btnEl) {
   btnEl.innerHTML = `${spinSVG} Enviando...`;
 
   try {
-    const res = await fetch('http://localhost:3000/send-email', {
+    const res = await fetch(`${API}/send-email`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
