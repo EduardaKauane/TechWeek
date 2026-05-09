@@ -57,21 +57,12 @@ body, .navbar, .site-footer, .schedule-card, .speaker-card,
 
 /* ── Base ── */
 * { margin: 0; padding: 0; }
-html { scroll-behavior: smooth; background: var(--bg); }
+html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', sans-serif;
-  background: transparent;
+  background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-}
-
-#particles-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: -1;
 }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; }
@@ -200,10 +191,11 @@ img { max-width: 100%; }
    HERO
    ============================================================ */
 .hero-bg-logos {
-  position: fixed;
+  position: absolute;
   inset: 0;
+  overflow: hidden;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
 }
 .bg-logo {
   position: absolute;
@@ -232,7 +224,7 @@ img { max-width: 100%; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: linear-gradient(160deg, var(--bg) 0%, var(--bg-alt) 100%);
   position: relative;
   text-align: center;
   padding-left: 24px;
@@ -406,10 +398,10 @@ img { max-width: 100%; }
 }
 .page-section {
   padding: 96px 0;
-  background: transparent;
+  background: var(--bg);
 }
 .page-section.bg-alt {
-  background: transparent;
+  background: var(--bg-alt);
 }
 .section-header-center {
   text-align: center;
