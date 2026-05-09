@@ -445,7 +445,7 @@
 
         if (speakers.length > 0) {
           document.getElementById('speakers-grid').innerHTML = speakers.map(s => `
-            <div class="speaker-card fade-in ${s.bio ? 'speaker-expandable' : ''}">
+            <div class="speaker-card fade-in">
               <div class="speaker-avatar-img">
                 ${s.foto
                   ? `<img src="${API_URL}${s.foto}" alt="${s.nome}">`
@@ -453,17 +453,9 @@
               </div>
               <h3>${s.nome}</h3>
               ${s.cargo || s.empresa ? `<p class="speaker-role">${[s.cargo,s.empresa].filter(Boolean).join(' · ')}</p>` : ''}
-              ${s.tema ? `<p class="speaker-tema-label">${s.tema}</p>` : ''}
-              ${s.linkedin && !s.bio ? `<a href="${s.linkedin}" target="_blank" class="speaker-linkedin-small" onclick="event.stopPropagation()">LinkedIn ↗</a>` : ''}
-              ${s.bio ? `
-              <div class="speaker-hover-panel">
-                <p class="shp-name">${s.nome}</p>
-                ${s.cargo || s.empresa ? `<p class="shp-role">${[s.cargo,s.empresa].filter(Boolean).join(' · ')}</p>` : ''}
-                ${s.tema ? `<span class="shp-tema">🎤 ${s.tema}</span>` : ''}
-                <div class="shp-divider"></div>
-                <p class="shp-bio">${s.bio}</p>
-                ${s.linkedin ? `<a href="${s.linkedin}" target="_blank" class="shp-linkedin" onclick="event.stopPropagation()">LinkedIn ↗</a>` : ''}
-              </div>` : ''}
+              ${s.tema ? `<span class="speaker-tema-label">🎤 ${s.tema}</span>` : ''}
+              ${s.bio ? `<p class="speaker-bio">${s.bio}</p>` : ''}
+              ${s.linkedin ? `<a href="${s.linkedin}" target="_blank" class="speaker-linkedin">LinkedIn ↗</a>` : ''}
             </div>`).join('');
           document.querySelectorAll('#speakers-grid .fade-in').forEach(el => observer.observe(el));
 
