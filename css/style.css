@@ -597,6 +597,59 @@ img { max-width: 100%; }
   color: var(--primary-light);
 }
 
+/* ── Speaker expandable card ── */
+.speaker-expandable { cursor: pointer; }
+.speaker-expandable:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+
+.speaker-tema-label {
+  font-size: 13px;
+  color: var(--primary-light);
+  margin-bottom: 2px;
+}
+.speaker-expanded-body {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+.speaker-card.expanded .speaker-expanded-body {
+  max-height: 400px;
+  opacity: 1;
+}
+.speaker-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 14px 0;
+}
+.speaker-bio-text {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.65;
+  text-align: left;
+  margin-bottom: 10px;
+}
+.speaker-linkedin-btn {
+  font-size: 12px;
+  color: var(--primary-light);
+  display: inline-block;
+}
+.speaker-expand-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.hint-chevron {
+  transition: transform 0.3s ease;
+}
+.speaker-card.expanded .hint-chevron {
+  transform: rotate(180deg);
+}
+
 /* ============================================================
    LOCALIZAÇÃO
    ============================================================ */
