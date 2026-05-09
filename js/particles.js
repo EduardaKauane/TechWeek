@@ -11,9 +11,8 @@
   let W, H, particles = [];
 
   function resize() {
-    const hero = document.getElementById('hero');
-    W = canvas.width  = hero ? hero.offsetWidth  : window.innerWidth;
-    H = canvas.height = hero ? hero.offsetHeight : window.innerHeight;
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
   }
 
   function isDark() {
