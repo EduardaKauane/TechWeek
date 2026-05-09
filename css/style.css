@@ -200,11 +200,10 @@ img { max-width: 100%; }
    HERO
    ============================================================ */
 .hero-bg-logos {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  overflow: hidden;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
 }
 .bg-logo {
   position: absolute;

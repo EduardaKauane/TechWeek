@@ -105,6 +105,32 @@ html { background: var(--bg); }
   z-index: -1;
 }
 
+.hero-bg-logos {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+.bg-logo {
+  position: absolute;
+  opacity: 0.09;
+  filter: brightness(0) drop-shadow(0 8px 24px rgba(30,58,138,0.12));
+  animation: floatLogo linear infinite;
+  transform-origin: center;
+  user-select: none;
+}
+[data-theme="dark"] .bg-logo {
+  opacity: 0.07;
+  filter: brightness(100) drop-shadow(0 8px 24px rgba(255,255,255,0.1));
+}
+@keyframes floatLogo {
+  0%   { transform: translateY(0px)   rotate(0deg)   scale(1);    }
+  25%  { transform: translateY(-18px) rotate(4deg)   scale(1.04); }
+  50%  { transform: translateY(-8px)  rotate(-3deg)  scale(0.97); }
+  75%  { transform: translateY(-22px) rotate(2deg)   scale(1.02); }
+  100% { transform: translateY(0px)   rotate(0deg)   scale(1);    }
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
   background: transparent;
