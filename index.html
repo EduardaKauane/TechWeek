@@ -391,6 +391,9 @@
       html.setAttribute('data-theme', next);
       localStorage.setItem('tw-theme', next);
       applyThemeAssets(!isDark);
+      void html.offsetWidth;
+      html.style.background = getComputedStyle(html).getPropertyValue('--bg').trim();
+      requestAnimationFrame(() => { html.style.background = ''; });
     }
 
     // Init icon + logo state
