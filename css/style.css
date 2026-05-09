@@ -561,11 +561,10 @@ img { max-width: 100%; }
    PALESTRANTES
    ============================================================ */
 .speakers-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  justify-content: center;
-  align-items: flex-start;
+  overflow: visible;
 }
 .speaker-card {
   background: var(--surface);
@@ -574,7 +573,6 @@ img { max-width: 100%; }
   padding: 32px 20px;
   text-align: center;
   box-shadow: var(--shadow-sm);
-  flex: 0 0 210px;
   transition: box-shadow 0.2s, transform 0.2s;
 }
 .speaker-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
@@ -607,80 +605,72 @@ img { max-width: 100%; }
   margin-bottom: 2px;
 }
 
-.speaker-expandable {
-  display: flex;
-  flex-direction: row;
-  padding: 0;
-  overflow: hidden;
-  transition: flex-basis 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+.speaker-card {
+  position: relative;
+  z-index: 1;
 }
 .speaker-expandable:hover {
-  flex-basis: 460px;
   box-shadow: var(--shadow);
-  transform: none;
+  transform: translateY(-3px);
   z-index: 10;
 }
 
-.speaker-main {
-  flex: 0 0 210px;
-  min-width: 210px;
-  padding: 32px 20px;
-  text-align: center;
-}
-
-.speaker-detail {
-  flex: 0 0 0;
-  min-width: 0;
-  overflow: hidden;
+.speaker-hover-panel {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 12px);
+  width: 260px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 20px;
+  text-align: left;
   opacity: 0;
-  border-left: 1px solid transparent;
-  transition: flex-basis 0.35s cubic-bezier(.4,0,.2,1), opacity 0.2s ease 0.1s, border-color 0.2s;
+  transform: translateX(-8px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  z-index: 30;
 }
-.speaker-expandable:hover .speaker-detail {
-  flex-basis: 230px;
-  min-width: 230px;
+.speaker-expandable:hover .speaker-hover-panel {
   opacity: 1;
-  border-left-color: var(--border);
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
 }
 
-.sd-inner {
-  padding: 24px 18px;
-  width: 220px;
-  min-width: 220px;
-}
-.sd-name {
+.shp-name {
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
   margin: 0 0 4px;
 }
-.sd-role {
+.shp-role {
   font-size: 12px;
   color: var(--text-2);
-  margin: 0 0 8px;
+  margin: 0 0 10px;
 }
-.sd-tema {
+.shp-tema {
   display: inline-block;
   font-size: 12px;
   font-weight: 600;
   color: var(--primary-light);
-  background: rgba(var(--primary-rgb, 99,102,241), 0.1);
+  background: rgba(37,99,235,0.1);
   border-radius: 20px;
   padding: 3px 10px;
   margin-bottom: 12px;
 }
-.sd-divider {
+.shp-divider {
   height: 1px;
   background: var(--border);
   margin: 8px 0 12px;
 }
-.sd-bio {
+.shp-bio {
   font-size: 13px;
   color: var(--text-2);
   line-height: 1.65;
   margin: 0 0 12px;
 }
-.sd-linkedin {
+.shp-linkedin {
   font-size: 12px;
   font-weight: 600;
   color: var(--primary-light);
@@ -689,7 +679,7 @@ img { max-width: 100%; }
   align-items: center;
   gap: 4px;
 }
-.sd-linkedin:hover { text-decoration: underline; }
+.shp-linkedin:hover { text-decoration: underline; }
 
 /* ============================================================
    LOCALIZAÇÃO
@@ -1126,7 +1116,7 @@ img { max-width: 100%; }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1024px) {
-  .speakers-grid { gap: 16px; }
+  .speakers-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
   .sobre-cards      { grid-template-columns: 1fr; }
@@ -1142,9 +1132,7 @@ img { max-width: 100%; }
   .countdown-block  { padding: 10px 0; border-radius: 10px; }
 }
 @media (max-width: 480px) {
-  .speakers-grid { gap: 12px; }
-  .speaker-expandable:hover { flex-basis: 210px; }
-  .speaker-expandable:hover .speaker-detail { flex-basis: 0; opacity: 0; }
+  .speakers-grid { grid-template-columns: 1fr 1fr; }
   .sponsors-grid { grid-template-columns: 1fr 1fr; }
   .hero-actions  { flex-direction: column; align-items: center; }
   .btn           { width: 100%; justify-content: center; }
