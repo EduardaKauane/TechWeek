@@ -617,8 +617,8 @@ img { max-width: 100%; }
 
 .speaker-hover-panel {
   position: absolute;
-  top: 0;
-  left: calc(100% + 12px);
+  top: calc(100% + 10px);
+  left: 50%;
   width: 260px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -627,14 +627,14 @@ img { max-width: 100%; }
   padding: 20px;
   text-align: left;
   opacity: 0;
-  transform: translateX(-8px) scale(0.97);
+  transform: translateX(-50%) translateY(-6px) scale(0.97);
   pointer-events: none;
   transition: opacity 0.22s ease, transform 0.22s ease;
   z-index: 30;
 }
 .speaker-expandable:hover .speaker-hover-panel {
   opacity: 1;
-  transform: translateX(0) scale(1);
+  transform: translateX(-50%) translateY(0) scale(1);
   pointer-events: auto;
 }
 

@@ -463,16 +463,6 @@
             </div>`).join('');
           document.querySelectorAll('#speakers-grid .fade-in').forEach(el => observer.observe(el));
 
-          document.querySelectorAll('#speakers-grid .speaker-expandable').forEach(card => {
-            card.addEventListener('mouseenter', function () {
-              const panel = this.querySelector('.speaker-hover-panel');
-              if (!panel) return;
-              const rect = this.getBoundingClientRect();
-              const overflow = rect.right + 272 > window.innerWidth;
-              panel.style.left  = overflow ? 'auto' : 'calc(100% + 12px)';
-              panel.style.right = overflow ? 'calc(100% + 12px)' : 'auto';
-            });
-          });
         }
 
         if (schedule.length > 0) {
