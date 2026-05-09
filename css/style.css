@@ -561,9 +561,11 @@ img { max-width: 100%; }
    PALESTRANTES
    ============================================================ */
 .speakers-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
 }
 .speaker-card {
   background: var(--surface);
@@ -572,6 +574,7 @@ img { max-width: 100%; }
   padding: 32px 20px;
   text-align: center;
   box-shadow: var(--shadow-sm);
+  flex: 0 0 210px;
   transition: box-shadow 0.2s, transform 0.2s;
 }
 .speaker-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
@@ -605,50 +608,58 @@ img { max-width: 100%; }
 }
 
 .speaker-expandable {
-  position: relative;
-  overflow: visible;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  overflow: hidden;
+  transition: flex-basis 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
 }
 .speaker-expandable:hover {
+  flex-basis: 460px;
   box-shadow: var(--shadow);
-  transform: translateY(-3px);
+  transform: none;
   z-index: 10;
 }
 
-.speaker-hover-panel {
-  position: absolute;
-  top: -8px;
-  left: calc(100% + 14px);
-  width: 270px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  padding: 20px;
+.speaker-main {
+  flex: 0 0 210px;
+  min-width: 210px;
+  padding: 32px 20px;
   text-align: center;
-  opacity: 0;
-  transform: translateX(-10px) scale(0.97);
-  pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s ease;
-  z-index: 30;
-}
-.speaker-card.speaker-expandable:hover .speaker-hover-panel {
-  opacity: 1;
-  transform: translateX(0) scale(1);
-  pointer-events: auto;
 }
 
-.shp-name {
+.speaker-detail {
+  flex: 0 0 0;
+  min-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  border-left: 1px solid transparent;
+  transition: flex-basis 0.35s cubic-bezier(.4,0,.2,1), opacity 0.2s ease 0.1s, border-color 0.2s;
+}
+.speaker-expandable:hover .speaker-detail {
+  flex-basis: 230px;
+  min-width: 230px;
+  opacity: 1;
+  border-left-color: var(--border);
+}
+
+.sd-inner {
+  padding: 24px 18px;
+  width: 220px;
+  min-width: 220px;
+}
+.sd-name {
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
   margin: 0 0 4px;
 }
-.shp-role {
+.sd-role {
   font-size: 12px;
   color: var(--text-2);
   margin: 0 0 8px;
 }
-.shp-tema {
+.sd-tema {
   display: inline-block;
   font-size: 12px;
   font-weight: 600;
@@ -658,19 +669,18 @@ img { max-width: 100%; }
   padding: 3px 10px;
   margin-bottom: 12px;
 }
-.shp-divider {
+.sd-divider {
   height: 1px;
   background: var(--border);
-  margin: 10px 0 12px;
+  margin: 8px 0 12px;
 }
-.shp-bio {
+.sd-bio {
   font-size: 13px;
   color: var(--text-2);
   line-height: 1.65;
-  text-align: left;
   margin: 0 0 12px;
 }
-.shp-linkedin {
+.sd-linkedin {
   font-size: 12px;
   font-weight: 600;
   color: var(--primary-light);
@@ -679,7 +689,7 @@ img { max-width: 100%; }
   align-items: center;
   gap: 4px;
 }
-.shp-linkedin:hover { text-decoration: underline; }
+.sd-linkedin:hover { text-decoration: underline; }
 
 /* ============================================================
    LOCALIZAÇÃO
@@ -1116,7 +1126,7 @@ img { max-width: 100%; }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1024px) {
-  .speakers-grid { grid-template-columns: repeat(2, 1fr); }
+  .speakers-grid { gap: 16px; }
 }
 @media (max-width: 768px) {
   .sobre-cards      { grid-template-columns: 1fr; }
@@ -1132,7 +1142,9 @@ img { max-width: 100%; }
   .countdown-block  { padding: 10px 0; border-radius: 10px; }
 }
 @media (max-width: 480px) {
-  .speakers-grid { grid-template-columns: 1fr 1fr; }
+  .speakers-grid { gap: 12px; }
+  .speaker-expandable:hover { flex-basis: 210px; }
+  .speaker-expandable:hover .speaker-detail { flex-basis: 0; opacity: 0; }
   .sponsors-grid { grid-template-columns: 1fr 1fr; }
   .hero-actions  { flex-direction: column; align-items: center; }
   .btn           { width: 100%; justify-content: center; }
