@@ -1176,7 +1176,12 @@ img { max-width: 100%; }
 @media (max-width: 1024px) {
   .speakers-grid { grid-template-columns: repeat(2, 1fr); }
 }
+/* Oculta painel hover em touch/mobile — hover não funciona bem em touch */
+@media (hover: none) {
+  .speaker-hover-panel { display: none !important; }
+}
 @media (max-width: 768px) {
+  .speaker-hover-panel { display: none !important; }
   .sobre-cards      { grid-template-columns: 1fr; }
   .schedule-grid    { grid-template-columns: 1fr; }
   .localizacao-grid { grid-template-columns: 1fr; }
