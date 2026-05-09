@@ -442,25 +442,25 @@
 
         if (speakers.length > 0) {
           document.getElementById('speakers-grid').innerHTML = speakers.map(s => `
-            <div class="speaker-card fade-in ${s.bio ? 'speaker-expandable' : ''}" onclick="toggleSpeaker(this)">
+            <div class="speaker-card fade-in ${s.bio ? 'speaker-expandable' : ''}">
               <div class="speaker-avatar-img">
                 ${s.foto
                   ? `<img src="${API_URL}${s.foto}" alt="${s.nome}">`
                   : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:28px;font-weight:700">${s.nome.charAt(0)}</div>`}
               </div>
               <h3>${s.nome}</h3>
-              ${s.cargo || s.empresa ? `<p style="font-size:12px;color:var(--text-muted);margin-bottom:2px">${[s.cargo,s.empresa].filter(Boolean).join(' · ')}</p>` : ''}
+              ${s.cargo || s.empresa ? `<p class="speaker-role">${[s.cargo,s.empresa].filter(Boolean).join(' · ')}</p>` : ''}
               ${s.tema ? `<p class="speaker-tema-label">${s.tema}</p>` : ''}
+              ${s.linkedin && !s.bio ? `<a href="${s.linkedin}" target="_blank" class="speaker-linkedin-small" onclick="event.stopPropagation()">LinkedIn ↗</a>` : ''}
               ${s.bio ? `
-              <div class="speaker-expanded-body">
-                <div class="speaker-divider"></div>
-                <p class="speaker-bio-text">${s.bio}</p>
-                ${s.linkedin ? `<a href="${s.linkedin}" target="_blank" class="speaker-linkedin-btn" onclick="event.stopPropagation()">LinkedIn ↗</a>` : ''}
-              </div>
-              <div class="speaker-expand-hint">
-                <span class="hint-text">Ver mais</span>
-                <svg class="hint-chevron" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-              </div>` : `${s.linkedin ? `<a href="${s.linkedin}" target="_blank" style="font-size:12px;color:var(--primary-light);margin-top:6px;display:inline-block" onclick="event.stopPropagation()">LinkedIn ↗</a>` : ''}`}
+              <div class="speaker-hover-panel">
+                <p class="shp-name">${s.nome}</p>
+                ${s.cargo || s.empresa ? `<p class="shp-role">${[s.cargo,s.empresa].filter(Boolean).join(' · ')}</p>` : ''}
+                ${s.tema ? `<span class="shp-tema">🎤 ${s.tema}</span>` : ''}
+                <div class="shp-divider"></div>
+                <p class="shp-bio">${s.bio}</p>
+                ${s.linkedin ? `<a href="${s.linkedin}" target="_blank" class="shp-linkedin" onclick="event.stopPropagation()">LinkedIn ↗</a>` : ''}
+              </div>` : ''}
             </div>`).join('');
           document.querySelectorAll('#speakers-grid .fade-in').forEach(el => observer.observe(el));
         }
@@ -530,12 +530,6 @@
     tickCountdown();
     countdownTimer = setInterval(tickCountdown, 1000);
 
-    function toggleSpeaker(card) {
-      if (!card.classList.contains('speaker-expandable')) return;
-      card.classList.toggle('expanded');
-      const hint = card.querySelector('.hint-text');
-      if (hint) hint.textContent = card.classList.contains('expanded') ? 'Ver menos' : 'Ver mais';
-    }
-  </script>
+</script>
 </body>
 </html>
