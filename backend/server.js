@@ -1,7 +1,6 @@
 const express = require('express');
 const cors    = require('cors');
 const path    = require('path');
-const fs      = require('fs');
 const multer  = require('multer');
 const { createClient } = require('@supabase/supabase-js');
 const { Resend } = require('resend');
@@ -14,19 +13,27 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 app.use(cors());
 app.use(express.json());
 
-// ── Uploads (fotos dos palestrantes) ──────────────────────────────────────────
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
-app.use('/uploads', express.static(UPLOADS_DIR));
+// ── Multer — memória (arquivos vão para o Supabase Storage) ───────────────────
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, UPLOADS_DIR),
-  filename:    (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `${Date.now()}${ext}`);
-  }
-});
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+const BUCKET = 'techweek';
+
+async function uploadToStorage(file, folder) {
+  const ext      = path.extname(file.originalname).toLowerCase();
+  const filename = `${folder}/${Date.now()}${ext}`;
+  const { error } = await supabase.storage
+    .from(BUCKET)
+    .upload(filename, file.buffer, { contentType: file.mimetype, upsert: false });
+  if (error) throw error;
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(filename);
+  return data.publicUrl;
+}
+
+async function deleteFromStorage(url) {
+  if (!url) return;
+  const match = url.match(new RegExp(`/${BUCKET}/(.+)$`));
+  if (match) await supabase.storage.from(BUCKET).remove([match[1]]);
+}
 
 // ── Mapeamento de tipo → tabela Supabase ──────────────────────────────────────
 const tableMap = {
@@ -59,7 +66,10 @@ app.get('/inscricoes', async (req, res) => {
 // ── POST /inscricao-palestrante (com upload de currículo) ─────────────────────
 app.post('/inscricao-palestrante', upload.single('curriculo'), async (req, res) => {
   const { nome, telefone, email, tema, briefing, duracao, biografia, experiencia } = req.body;
-  const curriculo = req.file ? `/uploads/${req.file.filename}` : null;
+  let curriculo = null;
+  try { if (req.file) curriculo = await uploadToStorage(req.file, 'curriculos'); }
+  catch (e) { return res.status(500).json({ success: false, error: `Erro ao salvar currículo: ${e.message}` }); }
+
   const id   = Date.now();
   const item = { id, status: 'pendente', nome, telefone, email, tema, briefing, duracao, biografia, curriculo, experiencia: experiencia || null };
 
@@ -123,9 +133,11 @@ app.get('/event-speakers', async (req, res) => {
 // ── POST /event-speakers ───────────────────────────────────────────────────────
 app.post('/event-speakers', upload.single('foto'), async (req, res) => {
   const { nome, cargo, empresa, bio, tema, linkedin } = req.body;
-  const foto = req.file ? `/uploads/${req.file.filename}` : null;
-  const item = { id: Date.now(), nome, cargo, empresa, bio, tema, linkedin, foto };
+  let foto = null;
+  try { if (req.file) foto = await uploadToStorage(req.file, 'fotos'); }
+  catch (e) { return res.status(500).json({ success: false, error: `Erro ao salvar foto: ${e.message}` }); }
 
+  const item = { id: Date.now(), nome, cargo, empresa, bio, tema, linkedin, foto };
   const { error } = await supabase.from('event_speakers').insert(item);
   if (error) return res.status(500).json({ success: false, error: error.message });
 
@@ -139,8 +151,10 @@ app.patch('/event-speakers/:id', upload.single('foto'), async (req, res) => {
   ['nome','cargo','empresa','bio','tema','linkedin'].forEach(f => {
     if (req.body[f] !== undefined) updates[f] = req.body[f];
   });
-  if (req.file) updates.foto = `/uploads/${req.file.filename}`;
-
+  if (req.file) {
+    try { updates.foto = await uploadToStorage(req.file, 'fotos'); }
+    catch (e) { return res.status(500).json({ success: false, error: `Erro ao salvar foto: ${e.message}` }); }
+  }
   const { error } = await supabase.from('event_speakers').update(updates).eq('id', req.params.id);
   if (error) return res.status(500).json({ success: false, error: error.message });
   res.json({ success: true });
@@ -149,10 +163,7 @@ app.patch('/event-speakers/:id', upload.single('foto'), async (req, res) => {
 // ── DELETE /event-speakers/:id ─────────────────────────────────────────────────
 app.delete('/event-speakers/:id', async (req, res) => {
   const { data } = await supabase.from('event_speakers').select('foto').eq('id', req.params.id).single();
-  if (data?.foto) {
-    const filePath = path.join(__dirname, data.foto);
-    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-  }
+  await deleteFromStorage(data?.foto);
   const { error } = await supabase.from('event_speakers').delete().eq('id', req.params.id);
   if (error) return res.status(500).json({ success: false, error: error.message });
   res.json({ success: true });
