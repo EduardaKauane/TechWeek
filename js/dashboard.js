@@ -199,7 +199,7 @@ function renderCurriculoField(item) {
   return `
     <div class="field-group full-width">
       <span class="field-label">Currículo</span>
-      <a href="${API}${item.curriculo}" target="_blank" class="field-value" style="color:var(--blue);text-decoration:underline">📄 Visualizar currículo</a>
+      <a href="${item.curriculo.startsWith('http') ? item.curriculo : API + item.curriculo}" target="_blank" class="field-value" style="color:var(--blue);text-decoration:underline">📄 Visualizar currículo</a>
     </div>`;
 }
 
