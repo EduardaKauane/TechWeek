@@ -36,11 +36,6 @@
     <div id="exp-detail" style="display:none;margin-bottom:14px">
       <textarea id="pal-exp-desc" placeholder="Descreva sua experiência como palestrante"></textarea>
     </div>
-    <label class="check-item">
-      <input type="checkbox" id="pal-equip">
-      <span>Preciso de equipamentos (projetor, som, etc)</span>
-    </label>
-
     <div style="margin-bottom:14px">
       <label style="display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Currículo (PDF — opcional)</label>
       <input type="file" id="pal-curriculo" accept=".pdf,.doc,.docx" style="font-size:13px;color:var(--text-2);width:100%">
@@ -99,12 +94,18 @@
         if (temExp && expDesc) fd.append('experiencia', expDesc);
         if (curriculo) fd.append('curriculo', curriculo);
 
-        await fetch(`${API}/inscricao-palestrante`, { method: 'POST', body: fd });
+        const res  = await fetch(`${API}/inscricao-palestrante`, { method: 'POST', body: fd });
+        const json = await res.json();
+
+        if (!res.ok || json.success === false) {
+          throw new Error(json.error || `HTTP ${res.status}`);
+        }
 
         sessionStorage.setItem('tw-toast', JSON.stringify({ type: 'success', message: 'Proposta enviada! Entraremos em contato em breve.' }));
         window.location.href = 'index.html';
-      } catch {
-        showToast('error', 'Erro ao conectar com o servidor. Verifique se o backend está rodando.');
+      } catch (err) {
+        erroEl.textContent = `❗ Erro ao enviar: ${err.message}`;
+        erroEl.style.display = 'block';
         btn.textContent = 'Enviar proposta';
         btn.disabled = false;
       }
