@@ -56,8 +56,10 @@ const sections = [
       { key: 'tema', label: 'Tema', fullWidth: false },
       { key: 'email', label: 'Email', fullWidth: false },
       { key: 'telefone', label: 'Telefone', fullWidth: false },
-      { key: 'duracao', label: 'Duração', fullWidth: false },
-      { key: 'briefing', label: 'Briefing', fullWidth: true }
+      { key: 'duracao',    label: 'Duração',           fullWidth: false },
+      { key: 'briefing',   label: 'Briefing',           fullWidth: true  },
+      { key: 'biografia',  label: 'Biografia',          fullWidth: true  },
+      { key: 'experiencia',label: 'Experiência Prévia', fullWidth: true  },
     ]
   },
   {
@@ -104,9 +106,10 @@ const icons = {
 };
 
 // ── State ──────────────────────────────────────────────────────────────────────
-let searchTerm  = '';
-let currentTab  = 'dashboard';
+let searchTerm    = '';
+let currentTab    = 'dashboard';
 let pendingAction = null;
+let editingId     = null;
 
 // ── Theme ──────────────────────────────────────────────────────────────────────
 (function applyTheme() {
@@ -190,6 +193,77 @@ function buildFields(item, section) {
     `).join('');
 }
 
+// ── Curriculo link helper ──────────────────────────────────────────────────────
+function renderCurriculoField(item) {
+  if (!item.curriculo) return '';
+  return `
+    <div class="field-group full-width">
+      <span class="field-label">Currículo</span>
+      <a href="${API}${item.curriculo}" target="_blank" class="field-value" style="color:var(--blue);text-decoration:underline">📄 Visualizar currículo</a>
+    </div>`;
+}
+
+// ── Edit speaker modal ─────────────────────────────────────────────────────────
+function openEditSpeaker(id) {
+  const item = findItem('palestrantes', id);
+  if (!item) return;
+  editingId = id;
+  document.getElementById('edit-nome').value     = item.nome      || '';
+  document.getElementById('edit-email').value    = item.email     || '';
+  document.getElementById('edit-telefone').value = item.telefone  || '';
+  document.getElementById('edit-tema').value     = item.tema      || '';
+  document.getElementById('edit-duracao').value  = item.duracao   || '';
+  document.getElementById('edit-briefing').value = item.briefing  || '';
+  document.getElementById('edit-bio').value      = item.biografia || '';
+  document.getElementById('edit-exp').value      = item.experiencia || '';
+  document.getElementById('edit-modal-overlay').classList.remove('hidden');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal-overlay').classList.add('hidden');
+  editingId = null;
+}
+
+async function saveEditSpeaker() {
+  if (!editingId) return;
+  const updates = {
+    nome:        document.getElementById('edit-nome').value.trim(),
+    email:       document.getElementById('edit-email').value.trim(),
+    telefone:    document.getElementById('edit-telefone').value.trim(),
+    tema:        document.getElementById('edit-tema').value.trim(),
+    duracao:     document.getElementById('edit-duracao').value.trim(),
+    briefing:    document.getElementById('edit-briefing').value.trim(),
+    biografia:   document.getElementById('edit-bio').value.trim(),
+    experiencia: document.getElementById('edit-exp').value.trim(),
+  };
+  try {
+    await fetch(`${API}/inscricao/palestrantes/${editingId}`, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(updates),
+    });
+    Object.assign(findItem('palestrantes', editingId), updates);
+    closeEditModal();
+    render();
+    renderRelatorios();
+    showToast('success', 'Inscrição atualizada!');
+  } catch {
+    showToast('error', 'Erro ao salvar alterações');
+  }
+}
+
+// ── Publicar palestrante no evento ─────────────────────────────────────────────
+function publicarNoEvento(id) {
+  const item = findItem('palestrantes', id);
+  if (!item) return;
+  switchTab('evento');
+  document.getElementById('speaker-form').classList.remove('hidden');
+  document.getElementById('sp-nome').value  = item.nome      || '';
+  document.getElementById('sp-bio').value   = item.biografia || '';
+  document.getElementById('sp-tema').value  = item.tema      || '';
+  showToast('info', 'Dados pré-preenchidos. Revise e salve.');
+}
+
 // ── Dashboard card ─────────────────────────────────────────────────────────────
 function renderCard(item, section) {
   const actions = item.status === 'pendente'
@@ -205,10 +279,11 @@ function renderCard(item, section) {
         ${icons.refresh} Alterar status
       </button>`;
 
+  const curriculoHTML = section.key === 'palestrantes' ? renderCurriculoField(item) : '';
   return `
     <div class="inscricao-card ${item.status}" data-id="${item.id}">
       <div class="card-top-row"><span></span>${getStatusBadge(item.status)}</div>
-      <div class="card-fields">${buildFields(item, section)}</div>
+      <div class="card-fields">${buildFields(item, section)}${curriculoHTML}</div>
       <div class="card-actions">${actions}</div>
     </div>`;
 }
@@ -328,13 +403,28 @@ function renderMiniCard(item, section) {
       title="Excluir registro"
     >${trashSVG}</button>`;
 
+  const isPalestrante = section.key === 'palestrantes';
+  const editBtn = isPalestrante ? `
+    <button class="btn btn-change" onclick="event.stopPropagation(); openEditSpeaker(${item.id})" title="Editar dados">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+      Editar
+    </button>` : '';
+
+  const publishBtn = (isPalestrante && item.status === 'aceito') ? `
+    <button class="btn btn-primary" onclick="event.stopPropagation(); publicarNoEvento(${item.id})" title="Publicar no evento">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Publicar no Evento
+    </button>` : '';
+
   const details = isOpen ? `
     <div class="rel-details">
-      <div class="card-fields">${buildFields(item, section)}</div>
+      <div class="card-fields">${buildFields(item, section)}${isPalestrante ? renderCurriculoField(item) : ''}</div>
       <div class="card-actions">
         <button class="btn btn-change" onclick="event.stopPropagation(); openChangeStatus('${section.key}', ${item.id})">
           ${icons.refresh} Alterar status
         </button>
+        ${editBtn}
+        ${publishBtn}
       </div>
     </div>` : '';
 
@@ -756,6 +846,10 @@ document.getElementById('btn-modal-cancel').addEventListener('click', hideModal)
 
 document.getElementById('modal-overlay').addEventListener('click', e => {
   if (e.target.id === 'modal-overlay') hideModal();
+});
+
+document.getElementById('edit-modal-overlay').addEventListener('click', e => {
+  if (e.target.id === 'edit-modal-overlay') closeEditModal();
 });
 
 document.getElementById('search-input').addEventListener('input', e => {

@@ -56,6 +56,20 @@ app.get('/inscricoes', async (req, res) => {
   }
 });
 
+// ── POST /inscricao-palestrante (com upload de currículo) ─────────────────────
+app.post('/inscricao-palestrante', upload.single('curriculo'), async (req, res) => {
+  const { nome, telefone, email, tema, briefing, duracao, biografia, experiencia } = req.body;
+  const curriculo = req.file ? `/uploads/${req.file.filename}` : null;
+  const id   = Date.now();
+  const item = { id, status: 'pendente', nome, telefone, email, tema, briefing, duracao, biografia, curriculo, experiencia: experiencia || null };
+
+  const { error } = await supabase.from('palestrantes').insert(item);
+  if (error) return res.status(500).json({ success: false, error: error.message });
+
+  console.log(`✅ Nova inscrição [palestrante] → ${nome}`);
+  res.json({ success: true, id });
+});
+
 // ── POST /inscricao ────────────────────────────────────────────────────────────
 app.post('/inscricao', async (req, res) => {
   const { tipo, ...dados } = req.body;
@@ -77,9 +91,12 @@ app.patch('/inscricao/:tipo/:id', async (req, res) => {
   const tabela = tableMap[req.params.tipo];
   if (!tabela) return res.status(400).json({ success: false, error: 'Tipo inválido' });
 
+  const updates = { ...req.body };
+  delete updates.id;
+
   const { error } = await supabase
     .from(tabela)
-    .update({ status: req.body.status })
+    .update(updates)
     .eq('id', req.params.id);
 
   if (error) return res.status(500).json({ success: false, error: error.message });

@@ -27,15 +27,24 @@
     <input id="pal-email"    type="email" placeholder="Email"            class="campo-obrigatorio campo-email">
     <input id="pal-tema"     type="text"  placeholder="Tema da palestra" class="campo-obrigatorio">
     <textarea id="pal-briefing" placeholder="Descreva sua palestra" class="campo-obrigatorio"></textarea>
+    <textarea id="pal-bio" placeholder="Biografia — apresentação pessoal para o evento" class="campo-obrigatorio"></textarea>
 
     <label class="check-item">
       <input type="checkbox" id="pal-exp">
       <span>Possuo experiência como palestrante</span>
     </label>
+    <div id="exp-detail" style="display:none;margin-bottom:14px">
+      <textarea id="pal-exp-desc" placeholder="Descreva sua experiência como palestrante"></textarea>
+    </div>
     <label class="check-item">
       <input type="checkbox" id="pal-equip">
       <span>Preciso de equipamentos (projetor, som, etc)</span>
     </label>
+
+    <div style="margin-bottom:14px">
+      <label style="display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Currículo (PDF — opcional)</label>
+      <input type="file" id="pal-curriculo" accept=".pdf,.doc,.docx" style="font-size:13px;color:var(--text-2);width:100%">
+    </div>
 
     <label class="range-label" for="tempoRange">Tempo necessário: <span id="tempoValor">40 minutos</span></label>
     <input type="range" min="40" max="60" step="5" value="40" id="tempoRange">
@@ -50,16 +59,24 @@
   <script>
     const API = 'https://techweek-production-fedb.up.railway.app';
 
-    async function enviarPalestrante() {
-      const nome     = document.getElementById('pal-nome').value.trim();
-      const telefone = document.getElementById('pal-telefone').value.trim();
-      const email    = document.getElementById('pal-email').value.trim();
-      const tema     = document.getElementById('pal-tema').value.trim();
-      const briefing = document.getElementById('pal-briefing').value.trim();
-      const duracao  = document.getElementById('tempoValor').textContent;
-      const erroEl   = document.getElementById('form-erro');
+    document.getElementById('pal-exp').addEventListener('change', function () {
+      document.getElementById('exp-detail').style.display = this.checked ? 'block' : 'none';
+    });
 
-      if (!nome || !telefone || !email || !tema || !briefing) {
+    async function enviarPalestrante() {
+      const nome      = document.getElementById('pal-nome').value.trim();
+      const telefone  = document.getElementById('pal-telefone').value.trim();
+      const email     = document.getElementById('pal-email').value.trim();
+      const tema      = document.getElementById('pal-tema').value.trim();
+      const briefing  = document.getElementById('pal-briefing').value.trim();
+      const bio       = document.getElementById('pal-bio').value.trim();
+      const duracao   = document.getElementById('tempoValor').textContent;
+      const temExp    = document.getElementById('pal-exp').checked;
+      const expDesc   = document.getElementById('pal-exp-desc').value.trim();
+      const curriculo = document.getElementById('pal-curriculo').files[0];
+      const erroEl    = document.getElementById('form-erro');
+
+      if (!nome || !telefone || !email || !tema || !briefing || !bio) {
         erroEl.textContent = '❗ Preencha todos os campos obrigatórios.';
         erroEl.style.display = 'block';
         return;
@@ -71,11 +88,18 @@
       btn.disabled = true;
 
       try {
-        await fetch(`${API}/inscricao`, {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tipo: 'palestrantes', nome, telefone, email, tema, briefing, duracao }),
-        });
+        const fd = new FormData();
+        fd.append('nome',      nome);
+        fd.append('telefone',  telefone);
+        fd.append('email',     email);
+        fd.append('tema',      tema);
+        fd.append('briefing',  briefing);
+        fd.append('biografia', bio);
+        fd.append('duracao',   duracao);
+        if (temExp && expDesc) fd.append('experiencia', expDesc);
+        if (curriculo) fd.append('curriculo', curriculo);
+
+        await fetch(`${API}/inscricao-palestrante`, { method: 'POST', body: fd });
 
         sessionStorage.setItem('tw-toast', JSON.stringify({ type: 'success', message: 'Proposta enviada! Entraremos em contato em breve.' }));
         window.location.href = 'index.html';
