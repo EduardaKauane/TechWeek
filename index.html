@@ -212,28 +212,7 @@
         <h2 class="section-title-dark">Palestrantes</h2>
         <p class="section-sub">Profissionais renomados compartilhando conhecimento e experiência</p>
       </div>
-      <div class="speakers-grid" id="speakers-grid">
-        <div class="speaker-card fade-in">
-          <div class="speaker-avatar-img"><img src="css/imgs/leon.png" alt="Dra. Ana Silva"></div>
-          <h3>Dra. Ana Silva</h3>
-          <p>Machine Learning na Prática</p>
-        </div>
-        <div class="speaker-card fade-in">
-          <div class="speaker-avatar-img"><img src="css/imgs/leon.png" alt="Prof. Carlos Mendes"></div>
-          <h3>Prof. Carlos Mendes</h3>
-          <p>Deep Learning e Visão Computacional</p>
-        </div>
-        <div class="speaker-card fade-in">
-          <div class="speaker-avatar-img"><img src="css/imgs/leon.png" alt="Dra. Beatriz Costa"></div>
-          <h3>Dra. Beatriz Costa</h3>
-          <p>IA na Saúde Digital</p>
-        </div>
-        <div class="speaker-card fade-in">
-          <div class="speaker-avatar-img"><img src="css/imgs/leon.png" alt="Prof. Roberto Alves"></div>
-          <h3>Prof. Roberto Alves</h3>
-          <p>Ética e Inteligência Artificial</p>
-        </div>
-      </div>
+      <div class="speakers-grid" id="speakers-grid"></div>
     </div>
   </section>
 
@@ -277,7 +256,7 @@
           <iframe
             src="https://maps.google.com/maps?cid=7622865775436645789&output=embed&hl=pt-BR"
             loading="lazy"
-            
+            allowfullscreen
             referrerpolicy="no-referrer-when-downgrade"
             title="Localização Unicesumar Londrina"
           ></iframe>
@@ -443,26 +422,29 @@
           setCountdownDate(config.data_inicio);
         }
 
-        if (speakers.length > 0) {
-          document.getElementById('speakers-grid').innerHTML = speakers.map(s => `
+        const speakerList = Array.isArray(speakers) ? speakers : [];
+        if (speakerList.length > 0) {
+          document.getElementById('speakers-grid').innerHTML = speakerList.map(s => `
             <div class="speaker-card fade-in">
               <div class="speaker-avatar-img">
                 ${s.foto
-                  ? `<img src="${s.foto.startsWith('http') ? s.foto : API_URL + s.foto}" alt="${s.nome}">`
-                  : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:28px;font-weight:700">${s.nome.charAt(0)}</div>`}
+                  ? `<img src="${s.foto.startsWith('http') ? s.foto : API_URL + s.foto}" alt="${s.nome || ''}">`
+                  : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:28px;font-weight:700">${(s.nome||'?').charAt(0)}</div>`}
               </div>
-              <h3>${s.nome}</h3>
+              <h3>${s.nome || ''}</h3>
               ${s.cargo || s.empresa ? `<p class="speaker-role">${[s.cargo,s.empresa].filter(Boolean).join(' · ')}</p>` : ''}
               ${s.tema ? `<span class="speaker-tema-label">🎤 ${s.tema}</span>` : ''}
               ${s.bio ? `<p class="speaker-bio">${s.bio}</p>` : ''}
-              ${s.linkedin ? `<a href="${s.linkedin}" target="_blank" class="speaker-linkedin">LinkedIn ↗</a>` : ''}
+              ${s.linkedin ? `<a href="${s.linkedin}" target="_blank" rel="noopener noreferrer" class="speaker-linkedin">LinkedIn ↗</a>` : ''}
             </div>`).join('');
           document.querySelectorAll('#speakers-grid .fade-in').forEach(el => observer.observe(el));
-
+        } else {
+          document.getElementById('speakers-grid').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px 0">Palestrantes em breve.</p>';
         }
 
-        if (schedule.length > 0) {
-          document.getElementById('schedule-grid').innerHTML = schedule.map(s => `
+        const scheduleList = Array.isArray(schedule) ? schedule : [];
+        if (scheduleList.length > 0) {
+          document.getElementById('schedule-grid').innerHTML = scheduleList.map(s => `
             <div class="schedule-card fade-in">
               <div class="schedule-icon">${calSVG}</div>
               <div class="schedule-info">
@@ -572,6 +554,7 @@
       function init() { resize(); pts = Array.from({ length: N }, () => new Pt()); }
 
       function loop() {
+        if (document.hidden) { requestAnimationFrame(loop); return; }
         ctx.clearRect(0, 0, W, H);
         for (let i = 0; i < pts.length; i++) {
           for (let j = i + 1; j < pts.length; j++) {

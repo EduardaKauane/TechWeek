@@ -73,6 +73,7 @@
   }
 
   function loop() {
+    if (document.hidden) { requestAnimationFrame(loop); return; }
     ctx.clearRect(0, 0, W, H);
     particles.forEach(p => { p.update(); p.draw(); });
     drawLines();

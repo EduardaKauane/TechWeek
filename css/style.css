@@ -622,46 +622,28 @@ img { max-width: 100%; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  overflow: visible;
 }
 .speaker-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 32px 20px;
-  text-align: center;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
   box-shadow: var(--shadow-sm);
   transition: box-shadow 0.2s, transform 0.2s;
 }
 .speaker-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
-.speaker-avatar {
-  width: 72px; height: 72px;
-  border-radius: 50%;
-  background: var(--primary);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-  letter-spacing: 1px;
-}
 .speaker-card h3 {
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
-.speaker-card p {
+.speaker-role {
   font-size: 13px;
   color: var(--primary-light);
-}
-
-/* ── Speaker card — info completa visível ── */
-.speaker-card {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  margin-bottom: 2px;
 }
 .speaker-tema-label {
   font-size: 12px;
@@ -678,9 +660,10 @@ img { max-width: 100%; }
   font-size: 13px;
   color: var(--text-2);
   line-height: 1.65;
-  margin: 8px 0 10px;
+  margin: 6px 0 10px;
   border-top: 1px solid var(--border);
   padding-top: 10px;
+  flex: 1;
 }
 .speaker-linkedin {
   font-size: 12px;
@@ -1135,7 +1118,6 @@ img { max-width: 100%; }
   .sobre-cards      { grid-template-columns: 1fr; }
   .schedule-grid    { grid-template-columns: 1fr; }
   .localizacao-grid { grid-template-columns: 1fr; }
-  .sponsors-grid    { grid-template-columns: repeat(2, 1fr); }
   .nav-links        { display: none; }
   .hero-title       { letter-spacing: -1px; }
   .form-container   { margin: calc(var(--nav-h) + 20px) 16px 40px; padding: 28px 20px; }
@@ -1143,11 +1125,9 @@ img { max-width: 100%; }
   .countdown-num    { font-size: 30px; letter-spacing: -1px; }
 }
 @media (max-width: 480px) {
-  .speakers-grid { grid-template-columns: 1fr 1fr; }
-  .sponsors-grid { grid-template-columns: 1fr 1fr; }
+  .speakers-grid { grid-template-columns: 1fr; }
   .hero-actions  { flex-direction: column; align-items: center; }
   .btn           { width: 100%; justify-content: center; }
-  .hero-countdown  { gap: 4px; }
+  .hero-countdown  { gap: 4px; padding: 16px 12px; border-radius: 16px; }
   .countdown-num   { font-size: 26px; letter-spacing: -1px; }
-  .hero-countdown  { padding: 16px 12px; border-radius: 16px; }
 }
