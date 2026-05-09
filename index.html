@@ -437,7 +437,6 @@
         if (config.data_inicio && config.data_fim) {
           document.getElementById('hero-date').textContent = formatPeriodo(config.data_inicio, config.data_fim);
           setCountdownDate(config.data_inicio);
-          tickCountdown();
         }
 
         if (speakers.length > 0) {
@@ -493,7 +492,8 @@
     let countdownTimer  = null;
 
     function setCountdownDate(dateStr) {
-      countdownTarget = new Date(dateStr + 'T00:00:00');
+      const d = new Date(dateStr + 'T00:00:00');
+      if (!isNaN(d) && d > new Date()) countdownTarget = d;
     }
 
     function pad(n) { return String(n).padStart(2, '0'); }
