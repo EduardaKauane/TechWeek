@@ -92,8 +92,9 @@ app.post('/inscricao', async (req, res) => {
   const tabela = tableMap[tipo];
   if (!tabela) return res.status(400).json({ success: false, error: 'Tipo inválido' });
 
-  const id   = Date.now();
-  const item = { id, status: 'pendente', ...dados };
+  const id     = Date.now();
+  const status = tipo === 'coffeeBreak' ? 'aceito' : 'pendente';
+  const item   = { id, status, ...dados };
 
   const { error } = await supabase.from(tabela).insert(item);
   if (error) return res.status(500).json({ success: false, error: error.message });

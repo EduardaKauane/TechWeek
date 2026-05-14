@@ -69,6 +69,7 @@ const sections = [
     listId: 'coffee-list',
     countId: 'count-coffee',
     statId: 'stat-coffee',
+    reportOnly: true,
     emptyMsg: 'Nenhum participante confirmado para o coffee break',
     emptyIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/></svg>`,
     fields: [
@@ -389,7 +390,7 @@ function renderMiniCard(item, section) {
   const isOpen   = relState.expandedCards.has(k);
   const wasSent  = emailSentItems.has(k);
 
-  const emailBtn = item.status === 'aceito' ? `
+  const emailBtn = (!section.reportOnly && item.status === 'aceito') ? `
     <button
       class="btn btn-email-mini ${wasSent ? 'btn-email-sent' : ''}"
       onclick="event.stopPropagation(); ${wasSent ? '' : `sendEmail('${section.key}', ${item.id}, this)`}"
@@ -423,9 +424,7 @@ function renderMiniCard(item, section) {
     <div class="rel-details">
       <div class="card-fields">${buildFields(item, section)}${isPalestrante ? renderCurriculoField(item) : ''}</div>
       <div class="card-actions">
-        <button class="btn btn-change" onclick="event.stopPropagation(); openChangeStatus('${section.key}', ${item.id})">
-          ${icons.refresh} Alterar status
-        </button>
+        ${section.reportOnly ? '' : `<button class="btn btn-change" onclick="event.stopPropagation(); openChangeStatus('${section.key}', ${item.id})">${icons.refresh} Alterar status</button>`}
         ${editBtn}
         ${publishBtn}
       </div>
@@ -467,16 +466,37 @@ function renderRelatorios() {
   if (!content) return;
 
   content.innerHTML = sections.map(section => {
-    const items        = db[section.key];
-    const totalAceitos = items.filter(i => i.status === 'aceito').length;
-    const totalNegados = items.filter(i => i.status === 'negado').length;
-
-    // Hide section when searching and no matches
-    const hasMatch = filterRel(items.filter(i => i.status === 'aceito' || i.status === 'negado')).length > 0;
-    if (relState.search && !hasMatch) return '';
-
+    const items  = db[section.key];
     const isOpen = relState.expandedSections.has(section.key);
     const title  = sectionTitles[section.key];
+
+    // Coffee break — lista simples de inscritos, sem status
+    if (section.reportOnly) {
+      const allItems = filterRel(items);
+      if (relState.search && allItems.length === 0) return '';
+      return `
+        <div class="card section">
+          <div class="rel-section-header" onclick="toggleRelSection('${section.key}')">
+            <div class="section-title">
+              <div class="section-icon">${section.emptyIcon}</div>
+              <h2>${title}</h2>
+              <div class="rel-count-badges">
+                <span class="rel-count-badge aceito-count">${items.length} inscrito${items.length !== 1 ? 's' : ''}</span>
+              </div>
+            </div>
+            <div class="expand-chevron ${isOpen ? 'open' : ''}">${chevronSVG}</div>
+          </div>
+          ${isOpen ? `<div class="rel-body">${allItems.length === 0
+            ? '<p class="rel-empty">Nenhum inscrito ainda</p>'
+            : allItems.map(item => renderMiniCard(item, section)).join('')
+          }</div>` : ''}
+        </div>`;
+    }
+
+    const totalAceitos = items.filter(i => i.status === 'aceito').length;
+    const totalNegados = items.filter(i => i.status === 'negado').length;
+    const hasMatch = filterRel(items.filter(i => i.status === 'aceito' || i.status === 'negado')).length > 0;
+    if (relState.search && !hasMatch) return '';
 
     return `
       <div class="card section">
@@ -513,11 +533,14 @@ function filterItems(items) {
 
 function render() {
   sections.forEach(section => {
-    const filtered = filterItems(db[section.key]);
-    const total    = db[section.key].length;
-    const pending  = db[section.key].filter(i => i.status === 'pendente').length;
+    const total   = db[section.key].length;
+    const pending = db[section.key].filter(i => i.status === 'pendente').length;
 
     animateCounter(document.getElementById(section.statId), total);
+
+    if (section.reportOnly) return; // coffee break só aparece no relatório
+
+    const filtered = filterItems(db[section.key]);
     document.getElementById(section.countId).textContent = filtered.length;
 
     const sub = document.getElementById(`stat-pending-${section.key}`);
