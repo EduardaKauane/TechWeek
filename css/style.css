@@ -73,6 +73,7 @@ body {
 }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; }
+[vw] img, [vw-plugin-wrapper] img { max-width: none; width: auto; height: auto; }
 
 /* ============================================================
    NAVBAR
