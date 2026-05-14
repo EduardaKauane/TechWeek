@@ -44,8 +44,8 @@ const FAQ = [
   {
     chip: false,
     keywords: ['palestrante', 'palestra', 'falar', 'proposta', 'submeter', 'inscricao palestrante'],
-    question: '🎤 Como ser palestrante?',
-    answer: 'Acesse a página de <strong>Inscrição de Palestrante</strong> e envie sua proposta de palestra. Alunos e profissionais são bem-vindos! 🎤'
+    question: 'Como ser palestrante?',
+    answer: 'Acesse a página de <strong>Inscrição de Palestrante</strong> e envie sua proposta de palestra. Alunos e profissionais são bem-vindos!'
   },
   {
     chip: false,
