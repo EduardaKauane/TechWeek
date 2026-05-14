@@ -367,20 +367,6 @@
     <div vw-access-button class="active"></div>
     <div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>
   </div>
-  <script>
-    (function() {
-      // Suprime apenas o popup alert do Unity/VLibras — não bloqueia o carregamento
-      var _alert = window.alert;
-      window.alert = function(msg) {
-        if (typeof msg === 'string' && (
-          msg.indexOf('Unity') !== -1 ||
-          msg.indexOf('Script error') !== -1 ||
-          msg.indexOf('An error occurred') !== -1
-        )) return;
-        return _alert.apply(this, arguments);
-      };
-    })();
-  </script>
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
   <script>try { new window.VLibras.Widget('https://vlibras.gov.br/app'); } catch(e) {}</script>
 
