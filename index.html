@@ -369,34 +369,16 @@
   </div>
   <script>
     (function() {
-      // Suprime o popup de erro do Unity/VLibras
+      // Suprime apenas o popup alert do Unity/VLibras — não bloqueia o carregamento
       var _alert = window.alert;
       window.alert = function(msg) {
         if (typeof msg === 'string' && (
           msg.indexOf('Unity') !== -1 ||
-          msg.indexOf('vlibras') !== -1 ||
           msg.indexOf('Script error') !== -1 ||
           msg.indexOf('An error occurred') !== -1
         )) return;
         return _alert.apply(this, arguments);
       };
-
-      // Suprime erros de script do VLibras
-      window.addEventListener('error', function(e) {
-        if (!e.target) return;
-        var src = e.target.src || e.target.href || e.filename || '';
-        if (src.indexOf('vlibras') !== -1 || src.indexOf('gov.br') !== -1) {
-          e.stopPropagation(); e.preventDefault(); return true;
-        }
-        if (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK') {
-          e.stopPropagation(); e.preventDefault(); return true;
-        }
-      }, true);
-
-      // Suprime promises rejeitadas do VLibras
-      window.addEventListener('unhandledrejection', function(e) {
-        if (e.reason && String(e.reason).indexOf('vlibras') !== -1) e.preventDefault();
-      });
     })();
   </script>
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
