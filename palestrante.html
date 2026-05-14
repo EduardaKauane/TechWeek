@@ -25,6 +25,11 @@
     <input id="pal-nome"     type="text"  placeholder="Nome completo"    class="campo-obrigatorio">
     <input id="pal-telefone" type="text"  placeholder="DDD + Telefone"   class="campo-obrigatorio campo-telefone">
     <input id="pal-email"    type="email" placeholder="Email"            class="campo-obrigatorio campo-email">
+    <select id="pal-curso" class="campo-obrigatorio" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:12px;cursor:pointer">
+      <option value="" disabled selected>Selecione seu curso</option>
+      <option value="ADS">Análise e Desenvolvimento de Sistemas - ADS</option>
+      <option value="ENG">Engenharia de Software - ENG</option>
+    </select>
     <input id="pal-tema"     type="text"  placeholder="Tema da palestra" class="campo-obrigatorio">
     <textarea id="pal-briefing" placeholder="Descreva sua palestra" class="campo-obrigatorio"></textarea>
     <textarea id="pal-bio" placeholder="Biografia — apresentação pessoal para o evento" class="campo-obrigatorio"></textarea>
@@ -62,6 +67,7 @@
       const nome      = document.getElementById('pal-nome').value.trim();
       const telefone  = document.getElementById('pal-telefone').value.trim();
       const email     = document.getElementById('pal-email').value.trim();
+      const curso     = document.getElementById('pal-curso').value;
       const tema      = document.getElementById('pal-tema').value.trim();
       const briefing  = document.getElementById('pal-briefing').value.trim();
       const bio       = document.getElementById('pal-bio').value.trim();
@@ -71,7 +77,7 @@
       const curriculo = document.getElementById('pal-curriculo').files[0];
       const erroEl    = document.getElementById('form-erro');
 
-      if (!nome || !telefone || !email || !tema || !briefing || !bio) {
+      if (!nome || !telefone || !email || !curso || !tema || !briefing || !bio) {
         erroEl.textContent = '❗ Preencha todos os campos obrigatórios.';
         erroEl.style.display = 'block';
         return;
@@ -87,6 +93,7 @@
         fd.append('nome',      nome);
         fd.append('telefone',  telefone);
         fd.append('email',     email);
+        fd.append('curso',     curso);
         fd.append('tema',      tema);
         fd.append('briefing',  briefing);
         fd.append('biografia', bio);

@@ -53,6 +53,7 @@ const sections = [
     emptyIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>`,
     fields: [
       { key: 'nome', label: 'Nome', fullWidth: false },
+      { key: 'curso',      label: 'Curso',              fullWidth: false },
       { key: 'tema', label: 'Tema', fullWidth: false },
       { key: 'email', label: 'Email', fullWidth: false },
       { key: 'telefone', label: 'Telefone', fullWidth: false },
@@ -211,6 +212,7 @@ function openEditSpeaker(id) {
   document.getElementById('edit-nome').value     = item.nome      || '';
   document.getElementById('edit-email').value    = item.email     || '';
   document.getElementById('edit-telefone').value = item.telefone  || '';
+  document.getElementById('edit-curso').value    = item.curso     || 'ADS';
   document.getElementById('edit-tema').value     = item.tema      || '';
   document.getElementById('edit-duracao').value  = item.duracao   || '';
   document.getElementById('edit-briefing').value = item.briefing  || '';
@@ -230,6 +232,7 @@ async function saveEditSpeaker() {
     nome:        document.getElementById('edit-nome').value.trim(),
     email:       document.getElementById('edit-email').value.trim(),
     telefone:    document.getElementById('edit-telefone').value.trim(),
+    curso:       document.getElementById('edit-curso').value,
     tema:        document.getElementById('edit-tema').value.trim(),
     duracao:     document.getElementById('edit-duracao').value.trim(),
     briefing:    document.getElementById('edit-briefing').value.trim(),
