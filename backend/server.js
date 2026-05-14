@@ -239,7 +239,7 @@ app.post('/send-email', async (req, res) => {
   try {
     const { data, error } = await resend.emails.send({
       from:    process.env.FROM_EMAIL || 'Tech Week <onboarding@resend.dev>',
-      to:      [process.env.TEST_EMAIL || email],
+      to:      [email],
       subject: isAprovado ? '🎉 Sua inscrição foi aprovada - Tech Week' : 'Resultado da sua inscrição - Tech Week',
       html:    isAprovado ? htmlAprovado : htmlReprovado,
     });
